@@ -320,6 +320,13 @@ class FLS_Admin {
 			update_post_meta( $post_id, '_fatlabschema_data', $_POST['fatlabschema_data'] );
 		}
 
+		// Save conflict override flag
+		if ( isset( $_POST['fatlabschema_override_conflict'] ) && $_POST['fatlabschema_override_conflict'] ) {
+			update_post_meta( $post_id, '_fatlabschema_override_conflict', true );
+		} else {
+			delete_post_meta( $post_id, '_fatlabschema_override_conflict' );
+		}
+
 		// Clear any cached schema for this post
 		delete_transient( 'fatlabschema_output_' . $post_id );
 	}

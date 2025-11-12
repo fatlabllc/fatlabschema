@@ -191,7 +191,10 @@ class FLS_Conflict_Detector {
 				</ul>
 				<div class="fls-warning-actions">
 					<label>
-						<input type="checkbox" name="fatlabschema_override_conflict" value="1" />
+						<?php
+						$override = get_post_meta( $post_id, '_fatlabschema_override_conflict', true );
+						?>
+						<input type="checkbox" name="fatlabschema_override_conflict" value="1" <?php checked( $override, true ); ?> />
 						<?php esc_html_e( 'I understand the risks - use FatLab Schema anyway', 'fatlabschema' ); ?>
 					</label>
 				</div>
