@@ -55,17 +55,6 @@ $settings = get_option( 'fatlabschema_settings', array() );
 			</tr>
 
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Auto-Suggest', 'fatlabschema' ); ?></th>
-				<td>
-					<label>
-						<input type="checkbox" name="fatlabschema_settings[auto_suggest]" value="1" <?php checked( $settings['auto_suggest'] ?? false, true ); ?> />
-						<?php esc_html_e( 'Automatically suggest schema based on page content', 'fatlabschema' ); ?>
-					</label>
-					<p class="description"><?php esc_html_e( 'Experimental feature. Uses content analysis to suggest schema types.', 'fatlabschema' ); ?></p>
-				</td>
-			</tr>
-
-			<tr>
 				<th scope="row"><?php esc_html_e( 'Debug Mode', 'fatlabschema' ); ?></th>
 				<td>
 					<label>

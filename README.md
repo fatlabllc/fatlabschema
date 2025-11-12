@@ -375,6 +375,18 @@ We welcome contributions! Here's how you can help:
 - [ ] Advanced conflict resolution
 - [ ] REST API expansion
 
+### Future Considerations
+
+**Intelligent Auto-Suggest**
+An AI-powered content analysis system that automatically suggests the most appropriate schema type based on page content. This feature would need to intelligently handle:
+- ACF field content extraction
+- Gutenberg block parsing
+- Classic editor content
+- Block theme variations
+- Custom post type detection
+
+This was considered for V1 but deferred due to complexity. Manual schema type selection provides a more reliable user experience in the initial release.
+
 ---
 
 ## Support

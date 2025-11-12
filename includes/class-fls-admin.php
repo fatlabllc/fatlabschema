@@ -121,7 +121,6 @@ class FLS_Admin {
 					'enabled'            => true,
 					'conflict_detection' => true,
 					'show_ai_badges'     => true,
-					'auto_suggest'       => false,
 					'debug_mode'         => false,
 				),
 			)
@@ -228,7 +227,6 @@ class FLS_Admin {
 		$sanitized['enabled']                     = isset( $input['enabled'] ) ? (bool) $input['enabled'] : false;
 		$sanitized['conflict_detection']          = isset( $input['conflict_detection'] ) ? (bool) $input['conflict_detection'] : false;
 		$sanitized['show_ai_badges']              = isset( $input['show_ai_badges'] ) ? (bool) $input['show_ai_badges'] : false;
-		$sanitized['auto_suggest']                = isset( $input['auto_suggest'] ) ? (bool) $input['auto_suggest'] : false;
 		$sanitized['debug_mode']                  = isset( $input['debug_mode'] ) ? (bool) $input['debug_mode'] : false;
 		$sanitized['preserve_data_on_uninstall']  = isset( $input['preserve_data_on_uninstall'] ) ? (bool) $input['preserve_data_on_uninstall'] : false;
 
