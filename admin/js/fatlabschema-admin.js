@@ -205,6 +205,9 @@
 		initializeFormFields: function(schemaType) {
 			var self = this;
 
+			// Store schema type as data attribute on form wrapper for preview functionality
+			$('.fls-schema-form-wrapper').attr('data-schema-type', schemaType);
+
 			// Date/time pickers
 			if ($('.fls-datepicker').length) {
 				$('.fls-datepicker').each(function() {
@@ -340,7 +343,8 @@
 			$(document).on('click', '.fls-preview-schema-button', function(e) {
 				e.preventDefault();
 
-				var schemaType = $('input[name="fatlabschema_type"]').val();
+				// Get schema type from data attribute or hidden input
+				var schemaType = $('.fls-schema-form-wrapper').data('schema-type') || $('input[name="fatlabschema_type"]').val();
 				var formData = $('.fls-schema-form-wrapper :input').serialize();
 
 				// Show loading

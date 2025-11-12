@@ -293,7 +293,7 @@ class FLS_Ajax {
 		check_ajax_referer( 'fatlabschema_admin_nonce', 'nonce' );
 
 		$schema_type = isset( $_POST['schema_type'] ) ? sanitize_text_field( $_POST['schema_type'] ) : '';
-		$schema_data = isset( $_POST['schema_data'] ) ? $_POST['schema_data'] : array();
+		$schema_data = isset( $_POST['fatlabschema_data'] ) ? $_POST['fatlabschema_data'] : array();
 		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
 
 		if ( empty( $schema_type ) ) {
