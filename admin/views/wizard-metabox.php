@@ -205,6 +205,14 @@ $current_type = $schema_type ?? 'none';
 	margin-top: 0;
 }
 
+.fls-warning-content .fls-recommendation {
+	margin-bottom: 5px;
+	color: #856404;
+	background: none;
+	border: none;
+	padding: 0;
+}
+
 .fls-warning-actions {
 	margin-top: 10px;
 }
