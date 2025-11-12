@@ -1,0 +1,61 @@
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Composer
+vendor/
+composer.lock
+
+# Build files
+*.min.js
+*.min.css
+.sass-cache/
+
+# WordPress
+wp-config.php
+.htaccess
+
+# Logs
+*.log
+error_log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Development
+.editorconfig
+phpcs.xml
+phpunit.xml
+.phpcs.xml.dist
+
+# Testing
+tests/
+phpunit.xml.dist
+
+# Development scripts (don't sync to production)
+sync-to-plugin.sh
+sync-from-plugin.sh
+test-plugin.sh
+DEV-README.md
+
+# Claude Code files (commercial plugin - exclude AI assistant artifacts)
+.claude/
+*.claude.md
+.claude.md
+
+# Development/workflow documents
+fatlabschema-v1-development-plan.md

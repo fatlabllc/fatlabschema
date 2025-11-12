@@ -1,0 +1,529 @@
+/**
+ * FatLab Schema Wizard - Admin Styles
+ *
+ * @package FatLab_Schema_Wizard
+ */
+
+/* Admin Page Layout */
+.fls-admin-page {
+	max-width: 1200px;
+}
+
+.fls-intro {
+	background: #f0f6fc;
+	border-left: 4px solid #2271b1;
+	padding: 15px 20px;
+	margin: 20px 0;
+}
+
+.fls-intro p {
+	margin: 0;
+	font-size: 14px;
+}
+
+/* Required Field Indicator */
+.required {
+	color: #d63638;
+	font-weight: bold;
+}
+
+/* Media Upload */
+.fls-media-upload {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.fls-media-url {
+	flex: 1;
+	min-width: 300px;
+}
+
+.fls-media-preview img {
+	display: block;
+	max-width: 200px;
+	height: auto;
+	border: 1px solid #ddd;
+	padding: 5px;
+	background: #fff;
+}
+
+/* Help Box */
+.fls-help-box {
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 20px;
+	margin-top: 30px;
+}
+
+.fls-help-box h3 {
+	margin-top: 0;
+}
+
+/* Tools Page */
+.fls-tools-section {
+	margin: 30px 0;
+	padding: 20px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+}
+
+.fls-tools-section h2 {
+	margin-top: 0;
+}
+
+.fls-tools-section table {
+	margin-top: 15px;
+}
+
+/* Help Page */
+.fls-help-section {
+	margin: 30px 0;
+	padding: 20px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+}
+
+.fls-help-section h2 {
+	margin-top: 0;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 10px;
+}
+
+.fls-help-section h3 {
+	color: #2271b1;
+	margin-top: 20px;
+}
+
+.fls-help-section ol {
+	padding-left: 20px;
+}
+
+.fls-help-section ol li {
+	margin: 10px 0;
+	line-height: 1.6;
+}
+
+/* Wizard Meta Box */
+.fls-wizard-container {
+	padding: 10px 0;
+}
+
+.fls-wizard-step {
+	animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.fls-wizard-step h3 {
+	margin-top: 0;
+	font-size: 16px;
+}
+
+.fls-schema-types {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 10px;
+	margin: 15px 0;
+}
+
+.fls-schema-type-option {
+	display: flex;
+	align-items: flex-start;
+	padding: 15px;
+	border: 2px solid #ddd;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s;
+	background: #fff;
+}
+
+.fls-schema-type-option:hover {
+	border-color: #2271b1;
+	background: #f6f7f7;
+}
+
+.fls-schema-type-option input[type="radio"]:checked + .dashicons {
+	color: #2271b1;
+}
+
+.fls-schema-type-option input[type="radio"]:checked ~ .fls-type-info strong {
+	color: #2271b1;
+}
+
+.fls-schema-type-option input[type="radio"] {
+	margin: 3px 10px 0 0;
+}
+
+.fls-schema-type-option .dashicons {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+	margin-right: 10px;
+	color: #50575e;
+	flex-shrink: 0;
+}
+
+.fls-type-info {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	flex: 1;
+}
+
+.fls-type-info strong {
+	display: block;
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+
+.fls-type-info .description {
+	font-size: 13px;
+	color: #646970;
+}
+
+.fls-wizard-actions {
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid #ddd;
+}
+
+/* Recommendation Display */
+.fls-recommendation {
+	background: #d4edda;
+	border-left: 4px solid #28a745;
+	padding: 20px;
+	margin: 15px 0;
+}
+
+.fls-recommendation.fls-no-schema {
+	background: #f0f6fc;
+	border-left-color: #2271b1;
+}
+
+.fls-recommendation h4 {
+	margin-top: 0;
+	color: #155724;
+}
+
+.fls-no-schema h4 {
+	color: #2271b1;
+}
+
+.fls-recommendation ul {
+	margin: 10px 0;
+	padding-left: 20px;
+}
+
+.fls-recommendation li {
+	margin: 5px 0;
+}
+
+.fls-recommendation .fls-use-cases {
+	font-style: italic;
+	color: #155724;
+	margin-top: 10px;
+}
+
+.fls-ai-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	background: #2271b1;
+	color: #fff;
+	padding: 5px 12px;
+	border-radius: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	margin-bottom: 15px;
+}
+
+.fls-ai-badge .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Status Indicators */
+.fls-status-indicator {
+	display: flex;
+	align-items: center;
+	padding: 12px;
+	border-radius: 4px;
+	margin-bottom: 15px;
+}
+
+.fls-status-active {
+	background: #d4edda;
+	border-left: 4px solid #28a745;
+}
+
+.fls-status-warning {
+	background: #fff3cd;
+	border-left: 4px solid #ffc107;
+}
+
+.fls-status-error {
+	background: #f8d7da;
+	border-left: 4px solid #dc3545;
+}
+
+.fls-status-indicator .dashicons {
+	margin-right: 8px;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+}
+
+.fls-status-active .dashicons {
+	color: #28a745;
+}
+
+.fls-status-warning .dashicons {
+	color: #ffc107;
+}
+
+.fls-status-error .dashicons {
+	color: #dc3545;
+}
+
+/* Conflict Warning */
+.fls-conflict-warning {
+	display: flex;
+	padding: 15px;
+	background: #fff3cd;
+	border-left: 4px solid #ffc107;
+	margin: 15px 0;
+	border-radius: 4px;
+}
+
+.fls-warning-icon {
+	margin-right: 15px;
+	flex-shrink: 0;
+}
+
+.fls-warning-icon .dashicons {
+	color: #ffc107;
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+}
+
+.fls-warning-content {
+	flex: 1;
+}
+
+.fls-warning-content h4 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #856404;
+}
+
+.fls-warning-content p {
+	margin: 5px 0;
+}
+
+.fls-recommendation {
+	font-weight: 600;
+	margin-top: 15px;
+}
+
+.fls-warning-content ul {
+	margin: 10px 0;
+	padding-left: 20px;
+}
+
+.fls-warning-content li {
+	margin: 5px 0;
+}
+
+.fls-warning-actions {
+	margin-top: 15px;
+	padding-top: 10px;
+	border-top: 1px solid #ffeaa7;
+}
+
+/* Loading State */
+.fls-loading {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 3px solid #f3f3f3;
+	border-top: 3px solid #2271b1;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+	.fls-schema-types {
+		grid-template-columns: 1fr;
+	}
+
+	.fls-media-upload {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.fls-media-url {
+		min-width: 100%;
+	}
+}
+
+/* Preview Modal */
+.fls-preview-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100000;
+}
+
+.fls-preview-content {
+	background: #fff;
+	padding: 30px;
+	border-radius: 8px;
+	max-width: 800px;
+	max-height: 80vh;
+	overflow-y: auto;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.fls-preview-content h3 {
+	margin-top: 0;
+	margin-bottom: 20px;
+	border-bottom: 2px solid #2271b1;
+	padding-bottom: 10px;
+}
+
+.fls-preview-content pre {
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 20px;
+	overflow-x: auto;
+	max-height: 400px;
+	font-size: 12px;
+	line-height: 1.6;
+}
+
+/* Form Styles */
+.fls-schema-form-wrapper {
+	background: #fff;
+	padding: 20px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	margin-top: 15px;
+}
+
+.fls-schema-form-wrapper h4 {
+	margin-top: 0;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+}
+
+.fls-schema-form-wrapper .form-table {
+	margin-top: 0;
+}
+
+.fls-schema-form-wrapper .form-table th {
+	width: 200px;
+}
+
+.fls-form-actions {
+	padding-top: 20px;
+	border-top: 1px solid #ddd;
+	margin-top: 20px;
+}
+
+/* Repeater Fields */
+.fls-repeater-container {
+	margin: 20px 0;
+}
+
+.fls-repeater-items {
+	margin-bottom: 15px;
+}
+
+.fls-repeater-item {
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 15px;
+	margin-bottom: 10px;
+	position: relative;
+}
+
+.fls-repeater-item:hover {
+	background: #fff;
+}
+
+.fls-remove-repeater-item {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	color: #d63638;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.fls-remove-repeater-item:hover {
+	color: #a00;
+}
+
+.fls-repeater-template {
+	display: none;
+}
+
+.fls-add-repeater-item {
+	margin-top: 10px;
+}
+
+/* Location Type Toggle */
+.fls-location-toggle {
+	margin: 15px 0;
+}
+
+.fls-physical-location,
+.fls-virtual-location {
+	margin-top: 15px;
+	padding: 15px;
+	background: #f6f7f7;
+	border-radius: 4px;
+}
+
+.fls-recommendation-actions {
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid #ddd;
+}
+
+.fls-recommendation-actions .button {
+	margin-right: 10px;
+}
