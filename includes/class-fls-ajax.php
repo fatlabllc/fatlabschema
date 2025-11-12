@@ -26,6 +26,11 @@ class FLS_Ajax {
 		add_action( 'wp_ajax_fls_get_schema_form', array( $this, 'get_schema_form' ) );
 		add_action( 'wp_ajax_fls_remove_schema', array( $this, 'remove_schema' ) );
 		add_action( 'wp_ajax_fls_reset_wizard', array( $this, 'reset_wizard' ) );
+
+		// Multiple schema management
+		add_action( 'wp_ajax_fls_get_schemas_list', array( $this, 'get_schemas_list' ) );
+		add_action( 'wp_ajax_fls_delete_single_schema', array( $this, 'delete_single_schema' ) );
+		add_action( 'wp_ajax_fls_toggle_schema', array( $this, 'toggle_schema' ) );
 	}
 
 	/**
@@ -79,6 +84,10 @@ class FLS_Ajax {
 	private function render_recommendation( $recommendation, $schema_type, $post, $conflict_warning ) {
 		$settings = get_option( 'fatlabschema_settings', array() );
 		$show_ai_badge = isset( $settings['show_ai_badges'] ) ? $settings['show_ai_badges'] : true;
+
+		// Get the proper schema type label
+		$schema_types = FLS_Wizard::get_schema_types();
+		$schema_label = isset( $schema_types[ $schema_type ]['label'] ) ? $schema_types[ $schema_type ]['label'] : ucfirst( $schema_type );
 		?>
 
 		<div class="fls-recommendation <?php echo $recommendation['recommended'] ? '' : 'fls-no-schema'; ?>">
@@ -120,7 +129,7 @@ class FLS_Ajax {
 						printf(
 							/* translators: %s: Schema type label */
 							esc_html__( 'Add %s Schema', 'fatlabschema' ),
-							esc_html( str_replace( array( 'Recommended: ', ' Schema' ), '', $recommendation['title'] ) )
+							esc_html( $schema_label )
 						);
 						?>
 					</button>
@@ -145,6 +154,7 @@ class FLS_Ajax {
 
 		$schema_type = isset( $_POST['schema_type'] ) ? sanitize_text_field( $_POST['schema_type'] ) : '';
 		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+		$schema_id = isset( $_POST['schema_id'] ) ? sanitize_text_field( $_POST['schema_id'] ) : '';
 
 		if ( empty( $schema_type ) || empty( $post_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'fatlabschema' ) ) );
@@ -156,23 +166,30 @@ class FLS_Ajax {
 		}
 
 		$post = get_post( $post_id );
-		$existing_data = get_post_meta( $post_id, '_fatlabschema_data', true );
+		$data = array();
+
+		// If editing existing schema, load its data
+		if ( ! empty( $schema_id ) ) {
+			$schema = FLS_Schema_Manager::get_schema( $post_id, $schema_id );
+			if ( $schema && isset( $schema['data'] ) ) {
+				$data = $schema['data'];
+			}
+		}
 
 		// Auto-fill data if no existing data
-		if ( empty( $existing_data ) ) {
+		if ( empty( $data ) ) {
 			$data = FLS_Wizard::auto_fill_data( $post, $schema_type );
-		} else {
-			$data = $existing_data;
 		}
 
 		// Build form HTML
 		ob_start();
-		$this->render_schema_form( $schema_type, $data, $post );
+		$this->render_schema_form( $schema_type, $data, $post, $schema_id );
 		$html = ob_get_clean();
 
 		wp_send_json_success( array(
-			'html' => $html,
-			'data' => $data,
+			'html'      => $html,
+			'data'      => $data,
+			'schema_id' => $schema_id,
 		) );
 	}
 
@@ -182,8 +199,9 @@ class FLS_Ajax {
 	 * @param string  $schema_type Schema type.
 	 * @param array   $data Schema data.
 	 * @param WP_Post $post Post object.
+	 * @param string  $schema_id Schema ID (optional).
 	 */
-	private function render_schema_form( $schema_type, $data, $post ) {
+	private function render_schema_form( $schema_type, $data, $post, $schema_id = '' ) {
 		// Load the appropriate form template
 		$form_file = FATLABSCHEMA_PATH . 'admin/views/forms/form-' . $schema_type . '.php';
 
@@ -249,6 +267,7 @@ class FLS_Ajax {
 		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
 		$schema_type = isset( $_POST['schema_type'] ) ? sanitize_text_field( $_POST['schema_type'] ) : '';
 		$schema_data = isset( $_POST['fatlabschema_data'] ) ? $_POST['fatlabschema_data'] : array();
+		$schema_id = isset( $_POST['schema_id'] ) ? sanitize_text_field( $_POST['schema_id'] ) : '';
 
 		if ( empty( $post_id ) || empty( $schema_type ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'fatlabschema' ) ) );
@@ -271,20 +290,26 @@ class FLS_Ajax {
 			) );
 		}
 
-		// Save schema data
-		update_post_meta( $post_id, '_fatlabschema_type', $schema_type );
-		update_post_meta( $post_id, '_fatlabschema_data', $schema_data );
-		update_post_meta( $post_id, '_fatlabschema_enabled', true );
-		update_post_meta( $post_id, '_fatlabschema_wizard_completed', true );
+		// Save or update schema using Schema Manager
+		if ( ! empty( $schema_id ) ) {
+			// Update existing schema
+			$success = FLS_Schema_Manager::update_schema( $post_id, $schema_id, $schema_type, $schema_data, true );
+		} else {
+			// Add new schema
+			$schema_id = FLS_Schema_Manager::add_schema( $post_id, $schema_type, $schema_data, true );
+			$success = ! empty( $schema_id );
+		}
 
-		// Clear cache
-		FLS_Output::clear_cache( $post_id );
+		if ( ! $success ) {
+			wp_send_json_error( array( 'message' => __( 'Failed to save schema.', 'fatlabschema' ) ) );
+		}
 
 		$warnings = $validator->get_validation_warnings();
 
 		wp_send_json_success( array(
-			'message' => __( 'Schema saved successfully!', 'fatlabschema' ),
-			'warnings' => $warnings,
+			'message'   => __( 'Schema saved successfully!', 'fatlabschema' ),
+			'warnings'  => $warnings,
+			'schema_id' => $schema_id,
 		) );
 	}
 
@@ -319,7 +344,7 @@ class FLS_Ajax {
 	}
 
 	/**
-	 * Remove schema from post.
+	 * Remove all schemas from post.
 	 */
 	public function remove_schema() {
 		check_ajax_referer( 'fatlabschema_admin_nonce', 'nonce' );
@@ -335,7 +360,10 @@ class FLS_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'fatlabschema' ) ) );
 		}
 
-		// Remove schema data
+		// Remove all schemas
+		delete_post_meta( $post_id, '_fatlabschema_schemas' );
+
+		// Remove old format data too (for backward compatibility)
 		delete_post_meta( $post_id, '_fatlabschema_type' );
 		delete_post_meta( $post_id, '_fatlabschema_data' );
 		delete_post_meta( $post_id, '_fatlabschema_enabled' );
@@ -345,7 +373,7 @@ class FLS_Ajax {
 		FLS_Output::clear_cache( $post_id );
 
 		wp_send_json_success( array(
-			'message' => __( 'Schema removed successfully.', 'fatlabschema' ),
+			'message' => __( 'All schemas removed successfully.', 'fatlabschema' ),
 		) );
 	}
 
@@ -366,11 +394,161 @@ class FLS_Ajax {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'fatlabschema' ) ) );
 		}
 
-		// Reset wizard completion flag
-		update_post_meta( $post_id, '_fatlabschema_wizard_completed', false );
+		// Remove all schemas to restart fresh
+		delete_post_meta( $post_id, '_fatlabschema_schemas' );
 
 		wp_send_json_success( array(
 			'message' => __( 'Wizard reset successfully.', 'fatlabschema' ),
+		) );
+	}
+
+	/**
+	 * Get schemas list for a post.
+	 */
+	public function get_schemas_list() {
+		check_ajax_referer( 'fatlabschema_admin_nonce', 'nonce' );
+
+		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+
+		if ( empty( $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'fatlabschema' ) ) );
+		}
+
+		// Check permissions
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'fatlabschema' ) ) );
+		}
+
+		$schemas = FLS_Schema_Manager::get_schemas( $post_id );
+		$schema_types = FLS_Wizard::get_schema_types();
+
+		// Build HTML for schemas list
+		ob_start();
+		$this->render_schemas_list( $schemas, $schema_types );
+		$html = ob_get_clean();
+
+		wp_send_json_success( array(
+			'html'    => $html,
+			'count'   => count( $schemas ),
+			'schemas' => $schemas,
+		) );
+	}
+
+	/**
+	 * Render schemas list HTML.
+	 *
+	 * @param array $schemas Schemas array.
+	 * @param array $schema_types Schema types definitions.
+	 */
+	private function render_schemas_list( $schemas, $schema_types ) {
+		if ( empty( $schemas ) ) {
+			?>
+			<div class="fls-no-schemas">
+				<p><?php esc_html_e( 'No schemas configured yet. Add your first schema to get started!', 'fatlabschema' ); ?></p>
+			</div>
+			<?php
+			return;
+		}
+
+		?>
+		<div class="fls-schemas-list">
+			<?php foreach ( $schemas as $schema_id => $schema ) : ?>
+				<?php
+				$type = $schema['type'];
+				$type_info = isset( $schema_types[ $type ] ) ? $schema_types[ $type ] : array(
+					'label' => ucfirst( $type ),
+					'icon'  => 'dashicons-admin-generic',
+				);
+				?>
+				<div class="fls-schema-item" data-schema-id="<?php echo esc_attr( $schema_id ); ?>">
+					<div class="fls-schema-item-header">
+						<span class="dashicons <?php echo esc_attr( $type_info['icon'] ); ?>"></span>
+						<span class="fls-schema-type-label"><?php echo esc_html( $type_info['label'] ); ?></span>
+					</div>
+					<div class="fls-schema-item-actions">
+						<button type="button" class="button fls-edit-single-schema" data-schema-id="<?php echo esc_attr( $schema_id ); ?>" data-schema-type="<?php echo esc_attr( $type ); ?>">
+							<?php esc_html_e( 'Edit', 'fatlabschema' ); ?>
+						</button>
+						<button type="button" class="button fls-delete-single-schema" data-schema-id="<?php echo esc_attr( $schema_id ); ?>">
+							<?php esc_html_e( 'Delete', 'fatlabschema' ); ?>
+						</button>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Delete a single schema.
+	 */
+	public function delete_single_schema() {
+		check_ajax_referer( 'fatlabschema_admin_nonce', 'nonce' );
+
+		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+		$schema_id = isset( $_POST['schema_id'] ) ? sanitize_text_field( $_POST['schema_id'] ) : '';
+
+		if ( empty( $post_id ) || empty( $schema_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'fatlabschema' ) ) );
+		}
+
+		// Check permissions
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'fatlabschema' ) ) );
+		}
+
+		$success = FLS_Schema_Manager::remove_schema( $post_id, $schema_id );
+
+		if ( ! $success ) {
+			wp_send_json_error( array( 'message' => __( 'Schema not found.', 'fatlabschema' ) ) );
+		}
+
+		wp_send_json_success( array(
+			'message' => __( 'Schema deleted successfully.', 'fatlabschema' ),
+		) );
+	}
+
+	/**
+	 * Toggle schema enabled/disabled status.
+	 */
+	public function toggle_schema() {
+		check_ajax_referer( 'fatlabschema_admin_nonce', 'nonce' );
+
+		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+		$schema_id = isset( $_POST['schema_id'] ) ? sanitize_text_field( $_POST['schema_id'] ) : '';
+		$enabled = isset( $_POST['enabled'] ) ? (bool) $_POST['enabled'] : false;
+
+		if ( empty( $post_id ) || empty( $schema_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'fatlabschema' ) ) );
+		}
+
+		// Check permissions
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'fatlabschema' ) ) );
+		}
+
+		$schema = FLS_Schema_Manager::get_schema( $post_id, $schema_id );
+
+		if ( ! $schema ) {
+			wp_send_json_error( array( 'message' => __( 'Schema not found.', 'fatlabschema' ) ) );
+		}
+
+		// Update schema enabled status
+		$success = FLS_Schema_Manager::update_schema(
+			$post_id,
+			$schema_id,
+			$schema['type'],
+			$schema['data'],
+			$enabled
+		);
+
+		if ( ! $success ) {
+			wp_send_json_error( array( 'message' => __( 'Failed to update schema.', 'fatlabschema' ) ) );
+		}
+
+		wp_send_json_success( array(
+			'message' => $enabled ? __( 'Schema enabled.', 'fatlabschema' ) : __( 'Schema disabled.', 'fatlabschema' ),
+			'enabled' => $enabled,
 		) );
 	}
 }

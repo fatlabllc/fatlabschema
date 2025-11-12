@@ -96,6 +96,7 @@ class FatLab_Schema_Wizard {
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-wizard.php';
 
 		// Core functionality classes
+		require_once FATLABSCHEMA_PATH . 'includes/class-fls-schema-manager.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-schema-generator.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-validator.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-conflict-detector.php';

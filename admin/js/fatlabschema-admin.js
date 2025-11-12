@@ -24,6 +24,11 @@
 		postId: null,
 
 		/**
+		 * Current schema ID being edited (for multiple schemas).
+		 */
+		currentSchemaId: null,
+
+		/**
 		 * Initialize.
 		 */
 		init: function() {
@@ -33,6 +38,7 @@
 			this.dismissNotices();
 			this.schemaActions();
 			this.schemaPreview();
+			this.multipleSchemas();
 		},
 
 		/**
@@ -101,25 +107,39 @@
 				$(this).closest('.fls-schema-type-option').addClass('selected');
 			});
 
-			// Back to step 1
+			// Back to step 1 or schemas manager
 			$(document).on('click', '.fls-wizard-back', function() {
 				$('.fls-step-2').fadeOut(300, function() {
-					$('.fls-step-1').fadeIn(300);
+					// If schemas manager exists and has content, go back to it
+					if ($('.fls-schemas-manager').length && $('.fls-schemas-list-wrapper .fls-schema-item').length > 0) {
+						$('.fls-step-1').hide();
+						$('.fls-schemas-manager').fadeIn(300);
+					} else {
+						$('.fls-step-1').fadeIn(300);
+					}
 				});
 			});
 
 			// Skip schema
 			$(document).on('click', '.fls-skip-schema', function() {
-				// Save "none" as schema type
-				$('input[name="fatlabschema_type"]').val('none');
-				$('input[name="fatlabschema_enabled"]').val('0');
-				$('input[name="fatlabschema_wizard_completed"]').val('1');
+				// If schemas manager exists, just go back to it
+				if ($('.fls-schemas-manager').length && $('.fls-schemas-list-wrapper .fls-schema-item').length > 0) {
+					$('.fls-step-2').fadeOut(300, function() {
+						$('.fls-step-1').hide();
+						$('.fls-schemas-manager').fadeIn(300);
+					});
+				} else {
+					// No schemas exist - save "none" as schema type
+					$('input[name="fatlabschema_type"]').val('none');
+					$('input[name="fatlabschema_enabled"]').val('0');
+					$('input[name="fatlabschema_wizard_completed"]').val('1');
 
-				// Show success message
-				self.showNotice('success', fatlabschemaAdmin.strings.no_schema_saved || 'No schema will be added to this page.');
+					// Show success message
+					self.showNotice('success', fatlabschemaAdmin.strings.no_schema_saved || 'No schema will be added to this page.');
 
-				// Close wizard
-				$('.fls-wizard-container').html('<p>' + (fatlabschemaAdmin.strings.no_schema_message || 'No schema configured for this page.') + '</p>');
+					// Close wizard
+					$('.fls-wizard-container').html('<p>' + (fatlabschemaAdmin.strings.no_schema_message || 'No schema configured for this page.') + '</p>');
+				}
 			});
 
 			// Add schema button
@@ -169,8 +189,11 @@
 		/**
 		 * Load schema form for a specific type.
 		 */
-		loadSchemaForm: function(schemaType) {
+		loadSchemaForm: function(schemaType, schemaId) {
 			var self = this;
+
+			// Store schema ID for use in save
+			self.currentSchemaId = schemaId || null;
 
 			// Show loading in step 2
 			$('.fls-step-2').html('<p><span class="fls-loading"></span> ' + (fatlabschemaAdmin.strings.loading || 'Loading form...') + '</p>');
@@ -178,16 +201,24 @@
 			// Make step 2 visible
 			$('.fls-step-2').show();
 
+			// Build AJAX data
+			var ajaxData = {
+				action: 'fls_get_schema_form',
+				nonce: fatlabschemaAdmin.nonce,
+				schema_type: schemaType,
+				post_id: self.postId
+			};
+
+			// Include schema ID if editing existing
+			if (schemaId) {
+				ajaxData.schema_id = schemaId;
+			}
+
 			// Load form via AJAX
 			$.ajax({
 				url: fatlabschemaAdmin.ajax_url,
 				type: 'POST',
-				data: {
-					action: 'fls_get_schema_form',
-					nonce: fatlabschemaAdmin.nonce,
-					schema_type: schemaType,
-					post_id: self.postId
-				},
+				data: ajaxData,
 				success: function(response) {
 					if (response.success) {
 						$('.fls-step-2').html(response.data.html);
@@ -249,7 +280,12 @@
 			$(document).on('click', '.fls-cancel-schema-button', function(e) {
 				e.preventDefault();
 				$('.fls-step-2').fadeOut(300, function() {
-					$('.fls-step-1').fadeIn(300);
+					// If schemas manager exists and has content, go back to it
+					if ($('.fls-schemas-manager').length && $('.fls-schemas-list-wrapper .fls-schema-item').length > 0) {
+						$('.fls-schemas-manager').fadeIn(300);
+					} else {
+						$('.fls-step-1').fadeIn(300);
+					}
 				});
 			});
 		},
@@ -287,17 +323,19 @@
 			// Show saving indicator
 			$('.fls-save-schema-button').prop('disabled', true).text(fatlabschemaAdmin.strings.saving || 'Saving...');
 
+			// Build data string with schema_id if editing existing
+			var dataString = formData + '&action=fls_save_schema&nonce=' + fatlabschemaAdmin.nonce + '&post_id=' + self.postId + '&schema_type=' + schemaType;
+
+			if (self.currentSchemaId) {
+				dataString += '&schema_id=' + self.currentSchemaId;
+			}
+
 			$.ajax({
 				url: fatlabschemaAdmin.ajax_url,
 				type: 'POST',
-				data: formData + '&action=fls_save_schema&nonce=' + fatlabschemaAdmin.nonce + '&post_id=' + self.postId + '&schema_type=' + schemaType,
+				data: dataString,
 				success: function(response) {
 					if (response.success) {
-						// Update hidden fields
-						$('input[name="fatlabschema_type"]').val(schemaType);
-						$('input[name="fatlabschema_enabled"]').val('1');
-						$('input[name="fatlabschema_wizard_completed"]').val('1');
-
 						// Show success message
 						self.showNotice('success', response.data.message || fatlabschemaAdmin.strings.saved || 'Schema saved successfully!');
 
@@ -311,7 +349,7 @@
 							self.showNotice('warning', warningHtml);
 						}
 
-						// Reload to show summary view
+						// Reload to show schemas manager view
 						setTimeout(function() {
 							window.location.reload();
 						}, 1500);
@@ -487,6 +525,111 @@
 					error: function() {
 						alert('Error resetting wizard.');
 						$('.fls-run-wizard-again').prop('disabled', false).text('Run Wizard Again');
+					}
+				});
+			});
+		},
+
+		/**
+		 * Multiple schemas management handlers.
+		 */
+		multipleSchemas: function() {
+			var self = this;
+
+			// Add another schema button
+			$(document).on('click', '.fls-add-another-schema', function(e) {
+				e.preventDefault();
+				$('.fls-schemas-manager').fadeOut(300, function() {
+					$('.fls-step-1').fadeIn(300);
+				});
+			});
+
+			// Cancel add schema button
+			$(document).on('click', '.fls-cancel-add-schema', function(e) {
+				e.preventDefault();
+				$('.fls-step-1').fadeOut(300, function() {
+					$('.fls-step-2').hide(); // Hide step 2 if it was showing
+					$('.fls-schemas-manager').fadeIn(300);
+				});
+			});
+
+			// Edit single schema button
+			$(document).on('click', '.fls-edit-single-schema', function(e) {
+				e.preventDefault();
+				var schemaId = $(this).data('schema-id');
+				var schemaType = $(this).data('schema-type');
+
+				$('.fls-schemas-manager').fadeOut(300, function() {
+					$('.fls-step-2').fadeIn(300);
+					self.loadSchemaForm(schemaType, schemaId);
+				});
+			});
+
+			// Delete single schema button
+			$(document).on('click', '.fls-delete-single-schema', function(e) {
+				e.preventDefault();
+				if (!confirm(fatlabschemaAdmin.strings.confirm_delete || 'Are you sure you want to delete this schema?')) {
+					return;
+				}
+
+				var button = $(this);
+				var schemaId = button.data('schema-id');
+
+				button.prop('disabled', true).text('Deleting...');
+
+				$.ajax({
+					url: fatlabschemaAdmin.ajax_url,
+					type: 'POST',
+					data: {
+						action: 'fls_delete_single_schema',
+						nonce: fatlabschemaAdmin.nonce,
+						post_id: self.postId,
+						schema_id: schemaId
+					},
+					success: function(response) {
+						if (response.success) {
+							window.location.reload();
+						} else {
+							alert(response.data.message || 'Error deleting schema.');
+							button.prop('disabled', false).text('Delete');
+						}
+					},
+					error: function() {
+						alert('Error deleting schema.');
+						button.prop('disabled', false).text('Delete');
+					}
+				});
+			});
+
+			// Remove all schemas button
+			$(document).on('click', '.fls-remove-all-schemas', function(e) {
+				e.preventDefault();
+				if (!confirm(fatlabschemaAdmin.strings.confirm_delete_all || 'Are you sure you want to remove ALL schemas? This action cannot be undone.')) {
+					return;
+				}
+
+				var button = $(this);
+				button.prop('disabled', true).text('Removing...');
+
+				$.ajax({
+					url: fatlabschemaAdmin.ajax_url,
+					type: 'POST',
+					data: {
+						action: 'fls_remove_schema',
+						nonce: fatlabschemaAdmin.nonce,
+						post_id: self.postId
+					},
+					success: function(response) {
+						if (response.success) {
+							window.location.reload();
+						} else {
+							alert(response.data.message || 'Error removing schemas.');
+							button.prop('disabled', false).text('Remove All Schemas');
+						}
+					},
+					error: function() {
+						alert('Error removing schemas.');
+						button.prop('disabled', false).text('Remove All Schemas');
 					}
 				});
 			});

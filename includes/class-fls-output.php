@@ -40,13 +40,20 @@ class FLS_Output {
 			$schemas[] = $org_schema;
 		}
 
-		// Output page-specific schema if on a singular post
+		// Output page-specific schemas if on a singular post
 		if ( is_singular() ) {
 			$post_id = get_the_ID();
-			$page_schema = $this->get_page_schema( $post_id );
+			$page_schemas = $this->get_page_schema( $post_id );
 
-			if ( ! empty( $page_schema ) ) {
-				$schemas[] = $page_schema;
+			if ( ! empty( $page_schemas ) && is_array( $page_schemas ) ) {
+				// Can be array of schemas (new format) or single schema (old format)
+				if ( isset( $page_schemas['@type'] ) ) {
+					// Single schema (old format for backward compatibility)
+					$schemas[] = $page_schemas;
+				} else {
+					// Multiple schemas (new format)
+					$schemas = array_merge( $schemas, $page_schemas );
+				}
 			}
 		}
 
@@ -96,40 +103,52 @@ class FLS_Output {
 			return null;
 		}
 
-		// Try cache first
-		$cached = get_transient( 'fatlabschema_output_' . $post_id );
-		if ( false !== $cached ) {
-			return $cached;
-		}
+		// Get all schemas for this post
+		$schemas = FLS_Schema_Manager::get_schemas( $post_id );
 
-		$schema_type = get_post_meta( $post_id, '_fatlabschema_type', true );
-		$schema_data = get_post_meta( $post_id, '_fatlabschema_data', true );
-
-		if ( empty( $schema_type ) || empty( $schema_data ) || 'none' === $schema_type ) {
+		if ( empty( $schemas ) ) {
 			return null;
 		}
 
-		// Check for conflicts if conflict detection is enabled
-		$settings = get_option( 'fatlabschema_settings', array() );
-		if ( isset( $settings['conflict_detection'] ) && $settings['conflict_detection'] ) {
-			$conflicts = FLS_Conflict_Detector::get_conflicting_schema_types( $post_id, $schema_type );
+		// Generate output for all enabled schemas
+		$output_schemas = array();
 
-			// Don't output if there's a conflict (unless user explicitly overrode)
-			if ( ! empty( $conflicts ) ) {
-				$override = get_post_meta( $post_id, '_fatlabschema_override_conflict', true );
-				if ( ! $override ) {
-					return null;
+		foreach ( $schemas as $schema_id => $schema ) {
+			// Check if schema is enabled (defaults to true if not set)
+			$enabled = isset( $schema['enabled'] ) ? $schema['enabled'] : true;
+			if ( ! $enabled ) {
+				continue;
+			}
+
+			$schema_type = $schema['type'];
+			$schema_data = $schema['data'];
+
+			if ( empty( $schema_type ) || empty( $schema_data ) || 'none' === $schema_type ) {
+				continue;
+			}
+
+			// Check for conflicts if conflict detection is enabled
+			$settings = get_option( 'fatlabschema_settings', array() );
+			if ( isset( $settings['conflict_detection'] ) && $settings['conflict_detection'] ) {
+				$conflicts = FLS_Conflict_Detector::get_conflicting_schema_types( $post_id, $schema_type );
+
+				// Don't output if there's a conflict (unless user explicitly overrode)
+				if ( ! empty( $conflicts ) ) {
+					$override = get_post_meta( $post_id, '_fatlabschema_override_conflict_' . $schema_id, true );
+					if ( ! $override ) {
+						continue;
+					}
 				}
+			}
+
+			// Generate schema
+			$generated = FLS_Schema_Generator::generate_json_ld( $schema_type, $schema_data, $post_id );
+			if ( ! empty( $generated ) ) {
+				$output_schemas[] = $generated;
 			}
 		}
 
-		// Generate schema
-		$schema = FLS_Schema_Generator::generate_json_ld( $schema_type, $schema_data, $post_id );
-
-		// Cache for 12 hours
-		set_transient( 'fatlabschema_output_' . $post_id, $schema, 12 * HOUR_IN_SECONDS );
-
-		return $schema;
+		return $output_schemas;
 	}
 
 	/**
@@ -139,13 +158,6 @@ class FLS_Output {
 	 * @return bool
 	 */
 	private function should_output_schema( $post_id ) {
-		// Check if schema is enabled for this post
-		$enabled = get_post_meta( $post_id, '_fatlabschema_enabled', true );
-
-		if ( ! $enabled ) {
-			return false;
-		}
-
 		// Check if post is published
 		$post = get_post( $post_id );
 		if ( ! $post || 'publish' !== $post->post_status ) {
