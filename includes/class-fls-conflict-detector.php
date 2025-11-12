@@ -233,4 +233,185 @@ class FLS_Conflict_Detector {
 
 		return implode( ', ', $names );
 	}
+
+	/**
+	 * Detect Organization schema conflicts.
+	 *
+	 * Checks if other SEO plugins are outputting Organization schema.
+	 *
+	 * @return array Array of plugins outputting Organization schema.
+	 */
+	public static function detect_organization_conflicts() {
+		$conflicts = array();
+		$active_plugins = self::detect_active_seo_plugins();
+
+		// Check each active plugin for Organization schema output
+		foreach ( $active_plugins as $plugin_id => $plugin_data ) {
+			$has_org_schema = false;
+
+			switch ( $plugin_id ) {
+				case 'yoast':
+					$has_org_schema = self::check_yoast_organization_schema();
+					break;
+				case 'rankmath':
+					$has_org_schema = self::check_rankmath_organization_schema();
+					break;
+				case 'aioseo':
+					$has_org_schema = self::check_aioseo_organization_schema();
+					break;
+				case 'seopress':
+					$has_org_schema = self::check_seopress_organization_schema();
+					break;
+			}
+
+			if ( $has_org_schema ) {
+				$conflicts[] = array(
+					'plugin' => $plugin_id,
+					'name'   => $plugin_data['name'],
+					'version' => $plugin_data['version'],
+				);
+			}
+		}
+
+		return apply_filters( 'fls_organization_conflicts', $conflicts );
+	}
+
+	/**
+	 * Check if Yoast is outputting Organization schema.
+	 *
+	 * @return bool
+	 */
+	private static function check_yoast_organization_schema() {
+		// Yoast outputs Organization schema if configured in Search Appearance > General
+		// Company settings are stored in wpseo_titles option
+		if ( ! class_exists( 'WPSEO_Options' ) ) {
+			return false;
+		}
+
+		// Check wpseo_titles option where company info is stored
+		$options = get_option( 'wpseo_titles' );
+
+		// Check if organization type is set
+		if ( empty( $options ) || empty( $options['company_or_person'] ) ) {
+			return false;
+		}
+
+		// If set to "company", check if company name is configured
+		if ( 'company' === $options['company_or_person'] && ! empty( $options['company_name'] ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if Rank Math is outputting Organization schema.
+	 *
+	 * @return bool
+	 */
+	private static function check_rankmath_organization_schema() {
+		// Rank Math outputs Organization schema if configured in General Settings > Local SEO
+		if ( ! function_exists( 'rank_math' ) ) {
+			return false;
+		}
+
+		// Check if organization name is set
+		$org_name = get_option( 'rank_math_knowledgegraph_name' );
+		$knowledgegraph_type = get_option( 'rank_math_knowledgegraph_type' );
+
+		// If organization type is selected and name is set
+		if ( 'company' === $knowledgegraph_type && ! empty( $org_name ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if All in One SEO is outputting Organization schema.
+	 *
+	 * @return bool
+	 */
+	private static function check_aioseo_organization_schema() {
+		// AIOSEO outputs Organization schema if configured in Search Appearance > Global Settings
+		if ( ! function_exists( 'aioseo' ) ) {
+			return false;
+		}
+
+		// Check AIOSEO options
+		$options = get_option( 'aioseo_options' );
+
+		if ( empty( $options ) ) {
+			return false;
+		}
+
+		// Check if organization is selected and name is set
+		if ( isset( $options['searchAppearance']['global']['schema']['organizationName'] )
+		     && ! empty( $options['searchAppearance']['global']['schema']['organizationName'] ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if SEOPress is outputting Organization schema.
+	 *
+	 * @return bool
+	 */
+	private static function check_seopress_organization_schema() {
+		// SEOPress outputs Organization schema if configured in Titles and Metas > Social Networks
+		if ( ! function_exists( 'seopress_get_service' ) ) {
+			return false;
+		}
+
+		$org_name = get_option( 'seopress_social_knowledge_name' );
+		$org_type = get_option( 'seopress_social_knowledge_type' );
+
+		// If organization type and name are set
+		if ( 'Organization' === $org_type && ! empty( $org_name ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get Organization conflict warning message.
+	 *
+	 * @return string|null HTML warning or null.
+	 */
+	public static function get_organization_conflict_warning() {
+		$conflicts = self::detect_organization_conflicts();
+
+		if ( empty( $conflicts ) ) {
+			return null;
+		}
+
+		$conflict = $conflicts[0]; // Show first conflict
+
+		ob_start();
+		?>
+		<div class="notice notice-warning" style="padding: 12px; margin: 20px 0;">
+			<h3 style="margin-top: 0;">
+				<span class="dashicons dashicons-warning" style="color: #f0b849;"></span>
+				<?php esc_html_e( 'Organization Schema Conflict Detected', 'fatlabschema' ); ?>
+			</h3>
+			<p>
+				<?php
+				printf(
+					/* translators: 1: Plugin name */
+					esc_html__( '%s is already configured to output Organization schema on your site. Having duplicate Organization schema on every page can confuse search engines and harm your SEO.', 'fatlabschema' ),
+					'<strong>' . esc_html( $conflict['name'] ) . '</strong>'
+				);
+				?>
+			</p>
+			<p>
+				<strong><?php esc_html_e( 'Recommendation:', 'fatlabschema' ); ?></strong>
+				<?php esc_html_e( 'Choose one plugin to manage Organization schema site-wide.', 'fatlabschema' ); ?>
+			</p>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
 }

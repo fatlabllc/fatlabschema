@@ -22,11 +22,60 @@ $organization = get_option( 'fatlabschema_organization', array() );
 		</p>
 	</div>
 
+	<?php
+	// Check if there are conflicts
+	$conflicts = FLS_Conflict_Detector::detect_organization_conflicts();
+	$settings = get_option( 'fatlabschema_settings', array() );
+	$schema_priority = $settings['organization_schema_priority'] ?? 'suppress_others';
+	$suppressed_plugins = FLS_Schema_Suppressor::get_suppressed_plugins();
+
+	// Show status badge if suppression is active
+	if ( ! empty( $suppressed_plugins ) ) :
+		$plugin_names = array_map(
+			function( $plugin ) {
+				return $plugin['name'];
+			},
+			$suppressed_plugins
+		);
+		?>
+		<div class="notice notice-success" style="border-left-color: #2271b1; padding: 12px; margin: 20px 0;">
+			<p style="margin: 0;">
+				<span class="dashicons dashicons-shield" style="color: #2271b1;"></span>
+				<strong><?php esc_html_e( 'FatLab Schema Active:', 'fatlabschema' ); ?></strong>
+				<?php
+				printf(
+					/* translators: %s: List of suppressed plugin names */
+					esc_html__( 'Organization schema from %s is being automatically suppressed. FatLab Schema is managing your Organization markup.', 'fatlabschema' ),
+					'<strong>' . implode( ', ', $plugin_names ) . '</strong>'
+				);
+				?>
+			</p>
+		</div>
+	<?php elseif ( ! empty( $conflicts ) ) : ?>
+		<div class="notice notice-warning" style="padding: 12px; margin: 20px 0;">
+			<p style="margin: 0;">
+				<span class="dashicons dashicons-warning" style="color: #f0b849;"></span>
+				<strong><?php esc_html_e( 'Organization Schema Conflict Detected:', 'fatlabschema' ); ?></strong>
+				<?php
+				$conflict = $conflicts[0];
+				printf(
+					/* translators: %s: Plugin name */
+					esc_html__( '%s is also configured to output Organization schema. This can cause duplicate schema issues.', 'fatlabschema' ),
+					'<strong>' . esc_html( $conflict['name'] ) . '</strong>'
+				);
+				?>
+				<br>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=fatlabschema-settings' ) ); ?>" style="font-weight: 600;">
+					<?php esc_html_e( 'Configure how conflicts are handled in Settings →', 'fatlabschema' ); ?>
+				</a>
+			</p>
+		</div>
+	<?php endif; ?>
+
 	<form method="post" action="options.php">
 		<?php
 		settings_fields( 'fatlabschema_organization_settings' );
 		?>
-
 		<table class="form-table" role="presentation">
 			<tr>
 				<th scope="row">

@@ -99,6 +99,7 @@ class FatLab_Schema_Wizard {
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-schema-generator.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-validator.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-conflict-detector.php';
+		require_once FATLABSCHEMA_PATH . 'includes/class-fls-schema-suppressor.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-output.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-ajax.php';
 
@@ -149,6 +150,9 @@ class FatLab_Schema_Wizard {
 	 */
 	private function define_public_hooks() {
 		$output = new FLS_Output();
+
+		// Initialize schema suppression for other plugins
+		FLS_Schema_Suppressor::init();
 	}
 }
 

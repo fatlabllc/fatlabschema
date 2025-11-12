@@ -68,6 +68,31 @@ class FLS_Admin_Notices {
 				);
 			}
 		}
+
+		// Schema suppression active notice
+		if ( $this->should_show_suppression_notice() ) {
+			$suppressed = FLS_Schema_Suppressor::get_suppressed_plugins();
+			if ( ! empty( $suppressed ) ) {
+				$plugin_names = array_map(
+					function( $plugin ) {
+						return $plugin['name'];
+					},
+					$suppressed
+				);
+
+				$this->render_notice(
+					'suppression_active',
+					'info',
+					sprintf(
+						/* translators: %s: List of suppressed plugin names */
+						__( '<strong>FatLab Schema:</strong> Organization schema from %s is currently being suppressed. FatLab Schema is managing your Organization markup. <a href="%s">Change settings</a>', 'fatlabschema' ),
+						implode( ', ', $plugin_names ),
+						admin_url( 'admin.php?page=fatlabschema' )
+					),
+					true
+				);
+			}
+		}
 	}
 
 	/**
@@ -91,6 +116,29 @@ class FLS_Admin_Notices {
 		$organization = get_option( 'fatlabschema_organization', array() );
 
 		return empty( $organization['name'] ) || empty( $organization['url'] );
+	}
+
+	/**
+	 * Check if suppression notice should be shown.
+	 *
+	 * @return bool
+	 */
+	private function should_show_suppression_notice() {
+		// Don't show if user dismissed it
+		if ( get_user_meta( get_current_user_id(), 'fatlabschema_dismissed_suppression_active', true ) ) {
+			return false;
+		}
+
+		// Only show on plugin pages
+		$screen = get_current_screen();
+		if ( ! $screen || strpos( $screen->id, 'fatlabschema' ) === false ) {
+			return false;
+		}
+
+		// Check if suppression is active
+		$settings = get_option( 'fatlabschema_settings', array() );
+
+		return ! empty( $settings['organization_schema_priority'] ) && 'suppress_others' === $settings['organization_schema_priority'];
 	}
 
 	/**

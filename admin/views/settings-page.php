@@ -43,6 +43,87 @@ $settings = get_option( 'fatlabschema_settings', array() );
 					<p class="description"><?php esc_html_e( 'Recommended. Warns you when other plugins are adding duplicate schema.', 'fatlabschema' ); ?></p>
 				</td>
 			</tr>
+		</table>
+
+		<?php
+		// Check if there are Organization schema conflicts
+		$org_conflicts = FLS_Conflict_Detector::detect_organization_conflicts();
+		if ( ! empty( $org_conflicts ) ) :
+			$conflict = $org_conflicts[0];
+			$schema_priority = $settings['organization_schema_priority'] ?? 'suppress_others';
+			?>
+
+			<div style="background: #f0f6fc; border: 2px solid #2271b1; border-radius: 6px; padding: 20px; margin: 20px 0;">
+				<h2 style="margin-top: 0; color: #2271b1;">
+					<span class="dashicons dashicons-shield" style="font-size: 24px; width: 24px; height: 24px; vertical-align: middle;"></span>
+					<?php esc_html_e( 'Organization Schema Priority', 'fatlabschema' ); ?>
+				</h2>
+
+				<div style="background: #fff3cd; border-left: 4px solid #f0b849; padding: 12px; margin-bottom: 20px;">
+					<p style="margin: 0;">
+						<strong><?php esc_html_e( 'Conflict Detected:', 'fatlabschema' ); ?></strong>
+						<?php
+						printf(
+							/* translators: %s: Plugin name */
+							esc_html__( '%s is configured to output Organization schema. Choose how FatLab Schema should handle this:', 'fatlabschema' ),
+							'<strong>' . esc_html( $conflict['name'] ) . '</strong>'
+						);
+						?>
+					</p>
+				</div>
+
+				<table class="form-table" role="presentation" style="margin-top: 0;">
+					<tr>
+						<th scope="row" style="padding-top: 0;">
+							<?php esc_html_e( 'How should Organization schema be managed?', 'fatlabschema' ); ?>
+						</th>
+						<td style="padding-top: 0;">
+							<fieldset>
+								<label style="display: block; margin-bottom: 15px; padding: 15px; background: white; border: 2px solid #2271b1; border-radius: 4px;">
+									<input type="radio" name="fatlabschema_settings[organization_schema_priority]" value="suppress_others" <?php checked( $schema_priority, 'suppress_others' ); ?> style="margin-top: 0;" />
+									<strong style="font-size: 14px;"><?php esc_html_e( 'Use FatLab Schema - suppress other plugins', 'fatlabschema' ); ?></strong>
+									<span style="background: #2271b1; color: white; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; margin-left: 8px;"><?php esc_html_e( 'RECOMMENDED', 'fatlabschema' ); ?></span>
+									<p class="description" style="margin: 8px 0 0 25px;">
+										<?php
+										printf(
+											/* translators: %s: Plugin name */
+											esc_html__( 'Automatically disable Organization schema from %s. FatLab Schema will be the single source for Organization markup site-wide. This prevents duplicate schema issues.', 'fatlabschema' ),
+											esc_html( $conflict['name'] )
+										);
+										?>
+									</p>
+								</label>
+
+								<label style="display: block; margin-bottom: 15px; padding: 15px; background: white; border: 1px solid #ddd; border-radius: 4px;">
+									<input type="radio" name="fatlabschema_settings[organization_schema_priority]" value="warn_only" <?php checked( $schema_priority, 'warn_only' ); ?> style="margin-top: 0;" />
+									<strong style="font-size: 14px;"><?php esc_html_e( 'Detect and warn only', 'fatlabschema' ); ?></strong>
+									<p class="description" style="margin: 8px 0 0 25px;">
+										<?php
+										printf(
+											/* translators: %s: Plugin name */
+											esc_html__( 'Show warnings about conflicts. Both FatLab Schema and %s will output Organization schema (not recommended - can cause duplicate schema issues).', 'fatlabschema' ),
+											esc_html( $conflict['name'] )
+										);
+										?>
+									</p>
+								</label>
+
+								<label style="display: block; padding: 15px; background: white; border: 1px solid #ddd; border-radius: 4px;">
+									<input type="radio" name="fatlabschema_settings[organization_schema_priority]" value="allow_both" <?php checked( $schema_priority, 'allow_both' ); ?> style="margin-top: 0;" />
+									<strong style="font-size: 14px;"><?php esc_html_e( 'Allow both (advanced users only)', 'fatlabschema' ); ?></strong>
+									<p class="description" style="margin: 8px 0 0 25px;">
+										<?php esc_html_e( 'No warnings, no suppression. Both plugins will output Organization schema. Only use this if you have a specific reason and understand the SEO implications of duplicate schema.', 'fatlabschema' ); ?>
+									</p>
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+		<?php endif; ?>
+
+		<table class="form-table" role="presentation">
 
 			<tr>
 				<th scope="row"><?php esc_html_e( 'AI Search Badges', 'fatlabschema' ); ?></th>

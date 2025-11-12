@@ -230,6 +230,12 @@ class FLS_Admin {
 		$sanitized['debug_mode']                  = isset( $input['debug_mode'] ) ? (bool) $input['debug_mode'] : false;
 		$sanitized['preserve_data_on_uninstall']  = isset( $input['preserve_data_on_uninstall'] ) ? (bool) $input['preserve_data_on_uninstall'] : false;
 
+		// Organization schema priority
+		$allowed_priorities = array( 'suppress_others', 'warn_only', 'allow_both' );
+		$sanitized['organization_schema_priority'] = isset( $input['organization_schema_priority'] ) && in_array( $input['organization_schema_priority'], $allowed_priorities, true )
+			? $input['organization_schema_priority']
+			: 'suppress_others';
+
 		return $sanitized;
 	}
 
