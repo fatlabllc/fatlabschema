@@ -24,6 +24,8 @@ class FLS_Ajax {
 		add_action( 'wp_ajax_fls_save_schema', array( $this, 'save_schema' ) );
 		add_action( 'wp_ajax_fls_preview_schema', array( $this, 'preview_schema' ) );
 		add_action( 'wp_ajax_fls_get_schema_form', array( $this, 'get_schema_form' ) );
+		add_action( 'wp_ajax_fls_remove_schema', array( $this, 'remove_schema' ) );
+		add_action( 'wp_ajax_fls_reset_wizard', array( $this, 'reset_wizard' ) );
 	}
 
 	/**
@@ -246,7 +248,7 @@ class FLS_Ajax {
 
 		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
 		$schema_type = isset( $_POST['schema_type'] ) ? sanitize_text_field( $_POST['schema_type'] ) : '';
-		$schema_data = isset( $_POST['schema_data'] ) ? $_POST['schema_data'] : array();
+		$schema_data = isset( $_POST['fatlabschema_data'] ) ? $_POST['fatlabschema_data'] : array();
 
 		if ( empty( $post_id ) || empty( $schema_type ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'fatlabschema' ) ) );
@@ -310,19 +312,65 @@ class FLS_Ajax {
 		// Format JSON
 		$json = wp_json_encode( $schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-		// Get Google Rich Results Test URL
-		$test_url = '';
-		if ( $post_id ) {
-			$permalink = get_permalink( $post_id );
-			if ( $permalink ) {
-				$test_url = 'https://search.google.com/test/rich-results?url=' . urlencode( $permalink );
-			}
+		wp_send_json_success( array(
+			'json'   => $json,
+			'schema' => $schema,
+		) );
+	}
+
+	/**
+	 * Remove schema from post.
+	 */
+	public function remove_schema() {
+		check_ajax_referer( 'fatlabschema_admin_nonce', 'nonce' );
+
+		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+
+		if ( empty( $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'fatlabschema' ) ) );
 		}
 
+		// Check permissions
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'fatlabschema' ) ) );
+		}
+
+		// Remove schema data
+		delete_post_meta( $post_id, '_fatlabschema_type' );
+		delete_post_meta( $post_id, '_fatlabschema_data' );
+		delete_post_meta( $post_id, '_fatlabschema_enabled' );
+		delete_post_meta( $post_id, '_fatlabschema_wizard_completed' );
+
+		// Clear cache
+		FLS_Output::clear_cache( $post_id );
+
 		wp_send_json_success( array(
-			'json' => $json,
-			'schema' => $schema,
-			'test_url' => $test_url,
+			'message' => __( 'Schema removed successfully.', 'fatlabschema' ),
+		) );
+	}
+
+	/**
+	 * Reset wizard for post.
+	 */
+	public function reset_wizard() {
+		check_ajax_referer( 'fatlabschema_admin_nonce', 'nonce' );
+
+		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+
+		if ( empty( $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'fatlabschema' ) ) );
+		}
+
+		// Check permissions
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'fatlabschema' ) ) );
+		}
+
+		// Reset wizard completion flag
+		update_post_meta( $post_id, '_fatlabschema_wizard_completed', false );
+
+		wp_send_json_success( array(
+			'message' => __( 'Wizard reset successfully.', 'fatlabschema' ),
 		) );
 	}
 }

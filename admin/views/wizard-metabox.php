@@ -72,6 +72,34 @@ $current_type = $schema_type ?? 'none';
 				<?php esc_html_e( 'Schema is configured for this page and will appear in search results.', 'fatlabschema' ); ?>
 			</p>
 
+			<?php
+			// Show Google Rich Results test button for published posts
+			$post_status = get_post_status( $post->ID );
+			$permalink = get_permalink( $post->ID );
+			if ( 'publish' === $post_status && $permalink ) :
+				$test_url = 'https://search.google.com/test/rich-results?url=' . urlencode( $permalink );
+				?>
+				<p class="fls-test-schema">
+					<a href="<?php echo esc_url( $test_url ); ?>" target="_blank" class="button button-primary">
+						<span class="dashicons dashicons-external" style="margin-top: 3px;"></span>
+						<?php esc_html_e( 'Test with Google Rich Results', 'fatlabschema' ); ?>
+					</a>
+					<span class="description" style="display: block; margin-top: 8px;">
+						<?php esc_html_e( 'Validate your schema markup with Google\'s testing tool.', 'fatlabschema' ); ?>
+					</span>
+				</p>
+			<?php elseif ( 'publish' !== $post_status ) : ?>
+				<p class="fls-test-schema">
+					<button type="button" class="button button-primary" disabled>
+						<span class="dashicons dashicons-external" style="margin-top: 3px;"></span>
+						<?php esc_html_e( 'Test with Google Rich Results', 'fatlabschema' ); ?>
+					</button>
+					<span class="description" style="display: block; margin-top: 8px; color: #646970;">
+						<?php esc_html_e( 'Publish this post to test with Google Rich Results.', 'fatlabschema' ); ?>
+					</span>
+				</p>
+			<?php endif; ?>
+
 			<p>
 				<button type="button" class="button fls-edit-schema"><?php esc_html_e( 'Edit Schema', 'fatlabschema' ); ?></button>
 				<button type="button" class="button fls-run-wizard-again"><?php esc_html_e( 'Run Wizard Again', 'fatlabschema' ); ?></button>
@@ -89,20 +117,9 @@ $current_type = $schema_type ?? 'none';
 			?>
 		</div>
 
-		<!-- Schema Form (hidden by default, shown when editing) -->
-		<div class="fls-schema-form" style="display:none;">
-			<h3><?php esc_html_e( 'Schema Details', 'fatlabschema' ); ?></h3>
-			<p class="description"><?php esc_html_e( 'Fill in the details for your schema markup:', 'fatlabschema' ); ?></p>
-
-			<!-- Schema fields will be loaded here based on type -->
-			<div class="fls-schema-fields">
-				<p><?php esc_html_e( 'Schema forms will be available in the next development phase.', 'fatlabschema' ); ?></p>
-			</div>
-
-			<p>
-				<button type="button" class="button button-primary fls-save-schema"><?php esc_html_e( 'Save Schema', 'fatlabschema' ); ?></button>
-				<button type="button" class="button fls-cancel-edit"><?php esc_html_e( 'Cancel', 'fatlabschema' ); ?></button>
-			</p>
+		<!-- Step 2: Edit Form (hidden by default, shown when editing) -->
+		<div class="fls-wizard-step fls-step-2" style="display:none;">
+			<!-- Content will be loaded via AJAX when editing -->
 		</div>
 
 	<?php endif; ?>
