@@ -22,8 +22,13 @@ class FLS_Schema_Manager {
 	 * @return array Array of schemas.
 	 */
 	public static function get_schemas( $post_id ) {
-		// Check if migration is needed
-		self::maybe_migrate_post( $post_id );
+		// Check if migration is needed (with transient caching)
+		$migration_checked = get_transient( 'fls_migration_checked_' . $post_id );
+		if ( false === $migration_checked ) {
+			self::maybe_migrate_post( $post_id );
+			// Cache the fact we've checked migration for 1 week
+			set_transient( 'fls_migration_checked_' . $post_id, true, WEEK_IN_SECONDS );
+		}
 
 		$schemas = get_post_meta( $post_id, '_fatlabschema_schemas', true );
 

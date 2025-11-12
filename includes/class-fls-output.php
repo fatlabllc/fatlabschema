@@ -16,6 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FLS_Output {
 
 	/**
+	 * Cached plugin settings.
+	 *
+	 * @var array|null
+	 */
+	private static $settings_cache = null;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -23,11 +30,23 @@ class FLS_Output {
 	}
 
 	/**
+	 * Get plugin settings with caching.
+	 *
+	 * @return array
+	 */
+	private static function get_settings() {
+		if ( null === self::$settings_cache ) {
+			self::$settings_cache = get_option( 'fatlabschema_settings', array() );
+		}
+		return self::$settings_cache;
+	}
+
+	/**
 	 * Output schema JSON-LD in the head.
 	 */
 	public function output_schema_json_ld() {
 		// Check if plugin is enabled
-		$settings = get_option( 'fatlabschema_settings', array() );
+		$settings = self::get_settings();
 		if ( ! isset( $settings['enabled'] ) || ! $settings['enabled'] ) {
 			return;
 		}
@@ -128,7 +147,7 @@ class FLS_Output {
 			}
 
 			// Check for conflicts if conflict detection is enabled
-			$settings = get_option( 'fatlabschema_settings', array() );
+			$settings = self::get_settings();
 			if ( isset( $settings['conflict_detection'] ) && $settings['conflict_detection'] ) {
 				$conflicts = FLS_Conflict_Detector::get_conflicting_schema_types( $post_id, $schema_type );
 
@@ -234,5 +253,13 @@ class FLS_Output {
 	 */
 	public static function clear_organization_cache() {
 		delete_transient( 'fatlabschema_organization_output' );
+	}
+
+	/**
+	 * Clear settings cache.
+	 * Call this when settings are updated.
+	 */
+	public static function clear_settings_cache() {
+		self::$settings_cache = null;
 	}
 }

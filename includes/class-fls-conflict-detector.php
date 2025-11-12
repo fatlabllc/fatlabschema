@@ -16,11 +16,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FLS_Conflict_Detector {
 
 	/**
+	 * Cached plugin settings.
+	 *
+	 * @var array|null
+	 */
+	private static $settings_cache = null;
+
+	/**
+	 * Cached active SEO plugins.
+	 *
+	 * @var array|null
+	 */
+	private static $active_plugins_cache = null;
+
+	/**
+	 * Get plugin settings with caching.
+	 *
+	 * @return array
+	 */
+	private static function get_settings() {
+		if ( null === self::$settings_cache ) {
+			self::$settings_cache = get_option( 'fatlabschema_settings', array() );
+		}
+		return self::$settings_cache;
+	}
+
+	/**
 	 * Detect active SEO plugins.
 	 *
 	 * @return array
 	 */
 	public static function detect_active_seo_plugins() {
+		// Return cached result if available
+		if ( null !== self::$active_plugins_cache ) {
+			return self::$active_plugins_cache;
+		}
+
 		$active_plugins = array();
 
 		// Check for Yoast SEO
@@ -55,7 +86,12 @@ class FLS_Conflict_Detector {
 			);
 		}
 
-		return apply_filters( 'fls_active_seo_plugins', $active_plugins );
+		$active_plugins = apply_filters( 'fls_active_seo_plugins', $active_plugins );
+
+		// Cache the result
+		self::$active_plugins_cache = $active_plugins;
+
+		return $active_plugins;
 	}
 
 	/**
@@ -142,7 +178,7 @@ class FLS_Conflict_Detector {
 	 */
 	public static function show_conflict_warning( $post_id, $our_type ) {
 		// Check if conflict detection is enabled
-		$settings = get_option( 'fatlabschema_settings', array() );
+		$settings = self::get_settings();
 		if ( ! isset( $settings['conflict_detection'] ) || ! $settings['conflict_detection'] ) {
 			return null;
 		}

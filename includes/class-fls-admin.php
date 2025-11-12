@@ -341,7 +341,7 @@ class FLS_Admin {
 	 * @param string $hook The current admin page.
 	 */
 	public function enqueue_admin_scripts( $hook ) {
-		// Only load on our admin pages and post editor
+		// Define our admin pages
 		$our_pages = array(
 			'toplevel_page_fatlabschema',
 			'schema-wizard_page_fatlabschema-settings',
@@ -349,43 +349,75 @@ class FLS_Admin {
 			'schema-wizard_page_fatlabschema-help',
 		);
 
-		if ( in_array( $hook, $our_pages, true ) || 'post.php' === $hook || 'post-new.php' === $hook ) {
-			// Enqueue CSS
-			wp_enqueue_style(
-				'fatlabschema-admin',
-				FATLABSCHEMA_URL . 'admin/css/fatlabschema-admin.css',
-				array(),
-				FATLABSCHEMA_VERSION
-			);
+		$is_our_page = in_array( $hook, $our_pages, true );
+		$is_post_editor = ( 'post.php' === $hook || 'post-new.php' === $hook );
 
-			// Enqueue JavaScript
-			wp_enqueue_script(
-				'fatlabschema-admin',
-				FATLABSCHEMA_URL . 'admin/js/fatlabschema-admin.js',
-				array( 'jquery', 'wp-util' ),
-				FATLABSCHEMA_VERSION,
-				true
-			);
+		// Only proceed if on our pages or post editor
+		if ( ! $is_our_page && ! $is_post_editor ) {
+			return;
+		}
 
-			// Localize script
-			wp_localize_script(
-				'fatlabschema-admin',
-				'fatlabschemaAdmin',
-				array(
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
-					'nonce'    => wp_create_nonce( 'fatlabschema_admin_nonce' ),
-					'strings'  => array(
-						'confirm_delete' => __( 'Are you sure you want to remove this schema?', 'fatlabschema' ),
-						'saving'         => __( 'Saving...', 'fatlabschema' ),
-						'saved'          => __( 'Saved!', 'fatlabschema' ),
-						'error'          => __( 'Error saving data.', 'fatlabschema' ),
-					),
-				)
-			);
+		// Enqueue CSS
+		wp_enqueue_style(
+			'fatlabschema-admin',
+			FATLABSCHEMA_URL . 'admin/css/fatlabschema-admin.css',
+			array(),
+			FATLABSCHEMA_VERSION
+		);
 
-			// Enqueue media uploader for logo upload
+		// Enqueue JavaScript with defer attribute for better performance
+		wp_enqueue_script(
+			'fatlabschema-admin',
+			FATLABSCHEMA_URL . 'admin/js/fatlabschema-admin.js',
+			array( 'jquery', 'wp-util' ),
+			FATLABSCHEMA_VERSION,
+			true
+		);
+
+		// Add defer attribute to our script
+		add_filter( 'script_loader_tag', array( $this, 'add_defer_attribute' ), 10, 2 );
+
+		// Localize script
+		wp_localize_script(
+			'fatlabschema-admin',
+			'fatlabschemaAdmin',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'fatlabschema_admin_nonce' ),
+				'strings'  => array(
+					'confirm_delete' => __( 'Are you sure you want to remove this schema?', 'fatlabschema' ),
+					'saving'         => __( 'Saving...', 'fatlabschema' ),
+					'saved'          => __( 'Saved!', 'fatlabschema' ),
+					'error'          => __( 'Error saving data.', 'fatlabschema' ),
+				),
+			)
+		);
+
+		// Only enqueue media uploader on our settings pages (not post editor)
+		// This saves significant JavaScript loading on post editor
+		if ( $is_our_page ) {
 			wp_enqueue_media();
 		}
+	}
+
+	/**
+	 * Add defer attribute to our admin script.
+	 *
+	 * @param string $tag    The script tag.
+	 * @param string $handle The script handle.
+	 * @return string
+	 */
+	public function add_defer_attribute( $tag, $handle ) {
+		if ( 'fatlabschema-admin' !== $handle ) {
+			return $tag;
+		}
+
+		// Add defer attribute if not already present
+		if ( strpos( $tag, ' defer' ) === false ) {
+			$tag = str_replace( ' src', ' defer src', $tag );
+		}
+
+		return $tag;
 	}
 
 	/**

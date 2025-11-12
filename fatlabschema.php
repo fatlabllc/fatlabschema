@@ -90,31 +90,47 @@ class FatLab_Schema_Wizard {
 	 * Load the required dependencies for this plugin.
 	 */
 	private function load_dependencies() {
-		// Admin classes
-		require_once FATLABSCHEMA_PATH . 'includes/class-fls-admin.php';
-		require_once FATLABSCHEMA_PATH . 'includes/class-fls-admin-notices.php';
-		require_once FATLABSCHEMA_PATH . 'includes/class-fls-wizard.php';
+		// Register autoloader for schema classes (lazy loading)
+		spl_autoload_register( array( $this, 'autoload_schema_classes' ) );
 
-		// Core functionality classes
+		// Core classes (always needed)
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-schema-manager.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-schema-generator.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-validator.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-conflict-detector.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-schema-suppressor.php';
 		require_once FATLABSCHEMA_PATH . 'includes/class-fls-output.php';
-		require_once FATLABSCHEMA_PATH . 'includes/class-fls-ajax.php';
 
-		// Schema type classes
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-organization.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-localbusiness.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-faqpage.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-event.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-service.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-article.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-howto.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-person.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-jobposting.php';
-		require_once FATLABSCHEMA_PATH . 'schemas/class-fls-schema-course.php';
+		// Admin classes (only if in admin)
+		if ( is_admin() ) {
+			require_once FATLABSCHEMA_PATH . 'includes/class-fls-admin.php';
+			require_once FATLABSCHEMA_PATH . 'includes/class-fls-admin-notices.php';
+			require_once FATLABSCHEMA_PATH . 'includes/class-fls-wizard.php';
+			require_once FATLABSCHEMA_PATH . 'includes/class-fls-ajax.php';
+		}
+
+		// Note: Schema type classes are now autoloaded on-demand
+	}
+
+	/**
+	 * Autoload schema classes on demand.
+	 *
+	 * @param string $class_name Class name to load.
+	 */
+	public function autoload_schema_classes( $class_name ) {
+		// Only handle our schema classes
+		if ( strpos( $class_name, 'FLS_Schema_' ) !== 0 ) {
+			return;
+		}
+
+		// Convert class name to file name
+		// FLS_Schema_Organization -> class-fls-schema-organization.php
+		$file_name = 'class-' . strtolower( str_replace( '_', '-', $class_name ) ) . '.php';
+		$file_path = FATLABSCHEMA_PATH . 'schemas/' . $file_name;
+
+		if ( file_exists( $file_path ) ) {
+			require_once $file_path;
+		}
 	}
 
 	/**
