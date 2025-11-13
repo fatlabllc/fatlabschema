@@ -164,5 +164,5 @@ For support, please visit https://fatlabwebsupport.com/support or use the WordPr
 
 == Credits ==
 
-Developed by Shane Larrabee at FatLab Web Support (https://fatlabwebsupport.com)
+Developed by FatLab Web Support (https://fatlabwebsupport.com)
 Built for nonprofits, political organizations, and mission-driven businesses.

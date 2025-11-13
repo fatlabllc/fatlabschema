@@ -8,7 +8,7 @@
 
 FatLab Schema Wizard is an intelligent WordPress plugin that focuses on the **10 schema types that actually matter** for SEO and AI citations. Unlike competitors offering 35+ obscure schema types, we guide you to correct implementations with the schemas proven to deliver results—and explicitly tell you when schema isn't needed.
 
-**Developed by [Shane Larrabee](https://fatlabwebsupport.com) at FatLab Web Support**
+**Developed by [FatLab Web Support](https://fatlabwebsupport.com)**
 
 ---
 
@@ -309,7 +309,7 @@ This plugin is licensed under the GNU General Public License v2 or later.
 
 ```
 FatLab Schema Wizard
-Copyright (C) 2025 Shane Larrabee, FatLab Web Support
+Copyright (C) 2025 FatLab Web Support
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -328,8 +328,7 @@ See [LICENSE.txt](LICENSE.txt) for the full license text.
 
 ## 🙏 Credits
 
-**Author**: Shane Larrabee
-**Company**: FatLab Web Support
+**Author**: FatLab Web Support
 **Website**: [https://fatlabwebsupport.com](https://fatlabwebsupport.com)
 **WordPress.org**: [fatlabllc](https://profiles.wordpress.org/fatlabllc/)
 
