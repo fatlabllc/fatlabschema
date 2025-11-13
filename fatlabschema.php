@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: FatLab Schema Wizard
- * Plugin URI: https://fatlabwebsupport.com/schema-wizard
+ * Plugin URI: https://fatlabwebsupport.com/projects/schema-wizard/
  * Description: Schema markup that knows when to say no. Intelligent wizard guides you to correct schema implementation optimized for AI search.
  * Version: 1.0.1
  * Requires at least: 5.8

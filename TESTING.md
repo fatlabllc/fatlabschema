@@ -183,8 +183,8 @@ If you notice slowdowns:
 
 ## Support & Questions
 
-- **Documentation**: https://fatlabwebsupport.com/schema-wizard/docs
-- **Support**: https://fatlabwebsupport.com/support
+- **Documentation**: https://fatlabwebsupport.com/projects/schema-wizard/docs
+- **Support**: https://fatlabwebsupport.com/get-support/
 - **GitHub Issues**: https://github.com/fatlabllc/fatlabschema/issues
 
 ---
@@ -233,4 +233,4 @@ If you're a developer:
 
 Your testing helps make FatLab Schema Wizard better for nonprofits, political organizations, and mission-driven businesses everywhere.
 
-**Questions?** Open an issue on GitHub or contact us at https://fatlabwebsupport.com/support
+**Questions?** Open an issue on GitHub or contact us at https://fatlabwebsupport.com/get-support/

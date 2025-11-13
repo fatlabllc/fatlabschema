@@ -1,6 +1,6 @@
 === FatLab Schema Wizard ===
 Contributors: fatlabllc
-Donate link: https://fatlabwebsupport.com/donate
+Donate link: https://fatlabwebsupport.com/projects/schema-wizard/
 Tags: schema, structured data, seo, json-ld, rich results, ai search, schema markup
 Requires at least: 5.8
 Tested up to: 6.7.1
@@ -160,7 +160,7 @@ FatLab Schema Wizard does not collect, store, or transmit any personal data. All
 
 == Support ==
 
-For support, please visit https://fatlabwebsupport.com/support or use the WordPress.org support forums.
+For support, please visit https://fatlabwebsupport.com/get-support/ or use the WordPress.org support forums.
 
 == Credits ==
 
