@@ -46,7 +46,7 @@ $organization = get_option( 'fatlabschema_organization', array() );
 				printf(
 					/* translators: %s: List of suppressed plugin names */
 					esc_html__( 'Organization schema from %s is being automatically suppressed. FatLab Schema is managing your Organization markup.', 'fatlabschema' ),
-					'<strong>' . implode( ', ', $plugin_names ) . '</strong>'
+					'<strong>' . esc_html( implode( ', ', $plugin_names ) ) . '</strong>'
 				);
 				?>
 			</p>

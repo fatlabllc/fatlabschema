@@ -119,7 +119,10 @@ class FLS_Ajax {
 			<?php endif; ?>
 
 			<?php if ( $conflict_warning ) : ?>
-				<?php echo $conflict_warning; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php
+				// Conflict warning contains safe HTML with escaped content (see FLS_Conflict_Detector::show_conflict_warning).
+				echo wp_kses_post( $conflict_warning );
+				?>
 			<?php endif; ?>
 
 			<div class="fls-recommendation-actions">

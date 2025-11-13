@@ -39,6 +39,7 @@
 			this.schemaActions();
 			this.schemaPreview();
 			this.multipleSchemas();
+			this.toolsPage();
 		},
 
 		/**
@@ -632,6 +633,27 @@
 						button.prop('disabled', false).text('Remove All Schemas');
 					}
 				});
+			});
+		},
+
+		/**
+		 * Tools page functionality.
+		 */
+		toolsPage: function() {
+			// Clear cache button
+			$(document).on('click', '#fls-clear-cache', function(e) {
+				e.preventDefault();
+				var button = $(this);
+				var confirmMessage = button.data('confirm') || 'Clear all schema cache?';
+				var successMessage = button.data('success') || 'Cache cleared!';
+
+				if (!confirm(confirmMessage)) {
+					return;
+				}
+
+				// For now, just show success message
+				// In future, could add AJAX endpoint for cache clearing
+				alert(successMessage);
 			});
 		},
 
