@@ -6,7 +6,7 @@
 [![PHP Version](https://img.shields.io/badge/php-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-GPL%20v2%2B-green.svg)](LICENSE.txt)
 
-FatLab Schema Wizard is an intelligent WordPress plugin that focuses on the **10 schema types that actually matter** for SEO and AI citations. Unlike competitors offering 35+ obscure schema types, we guide you to correct implementations with the schemas proven to deliver results—and explicitly tell you when schema isn't needed.
+FatLab Schema Wizard is an intelligent WordPress plugin that focuses on the **11 schema types that actually matter** for SEO and AI citations. Unlike competitors offering 35+ obscure schema types, we guide you to correct implementations with the schemas proven to deliver results—and explicitly tell you when schema isn't needed.
 
 **Developed by [FatLab Web Support](https://fatlabwebsupport.com)**
 
@@ -34,9 +34,9 @@ Properly structured schema helps AI assistants understand and cite your content:
 - **Live Preview** - See your JSON-LD before publishing
 
 ### Focused on What Actually Works
-**10 schema types that matter, not 35+ types that don't.**
+**11 schema types that matter, not 35+ types that don't.**
 
-Most schema plugins overwhelm you with 35+ schema types. Here's the truth: **only about 10 schema types actually deliver results for SEO and AI citations.** The rest are either too specialized, not supported by search engines for rich results, or ignored by AI assistants.
+Most schema plugins overwhelm you with 35+ schema types. Here's the truth: **only about 11 schema types actually deliver results for SEO and AI citations.** The rest are either too specialized, not supported by search engines for rich results, or ignored by AI assistants.
 
 We focus exclusively on schemas proven to work:
 - ✅ Recognized by Google for rich results
@@ -44,18 +44,19 @@ We focus exclusively on schemas proven to work:
 - ✅ Proven to improve click-through rates
 - ✅ Actually relevant for most websites
 
-**The 10 Schema Types That Actually Matter:**
+**The 11 Schema Types That Actually Matter:**
 
 1. **Organization / NGO** - For businesses, nonprofits, political organizations
 2. **LocalBusiness** - Physical locations with full address information
 3. **Event** - Fundraisers, rallies, webinars, town halls
-4. **FAQPage** - Frequently asked questions, policy positions
-5. **Service** - Services offered by your organization
-6. **Article / ScholarlyArticle** - Blog posts, research papers, white papers
-7. **HowTo** - Step-by-step guides and tutorials
-8. **Person** - Staff profiles, leadership bios, candidate information
-9. **JobPosting** - Job listings and employment opportunities
-10. **Course** - Educational courses and training programs
+4. **Video** - YouTube videos, Vimeo, video tutorials, promotional videos
+5. **FAQPage** - Frequently asked questions, policy positions
+6. **Service** - Services offered by your organization
+7. **Article / ScholarlyArticle** - Blog posts, research papers, white papers
+8. **HowTo** - Step-by-step guides and tutorials
+9. **Person** - Staff profiles, leadership bios, candidate information
+10. **JobPosting** - Job listings and employment opportunities
+11. **Course** - Educational courses and training programs
 
 Less decision paralysis. Better results. No wasted time.
 
@@ -120,7 +121,7 @@ The result? Decision paralysis, wasted time, and schema that doesn't help your s
 FatLab Schema Wizard takes a different approach:
 
 **Focus on What Works**
-- ✅ Only the 10 schema types proven to generate rich results or AI citations
+- ✅ Only the 11 schema types proven to generate rich results or AI citations
 - ✅ No obscure schema types that search engines ignore
 - ✅ Every schema type we support actually delivers value
 
@@ -267,11 +268,21 @@ See [DEV-README.md](DEV-README.md) for detailed development workflow.
 
 ## 📝 Changelog
 
-### Version 1.0.0 (Current)
+### Version 1.0.1 (Current)
+**Video Schema Added**
+
+Expanding from 10 to 11 schema types with the addition of VideoObject:
+- ✨ New: Video schema (VideoObject) for YouTube, Vimeo, and self-hosted videos
+- ✨ New: Video admin form with thumbnail, duration, transcript, and view count fields
+- ✨ New: Smart duration formatting (accepts MM:SS, HH:MM:SS, or seconds)
+- 📝 Updated: All documentation to reflect 11 schema types
+- 📝 Updated: README and development plan
+
+### Version 1.0.0
 **Initial Release - Quality Over Quantity**
 
-Unlike competitors offering 35+ schema types (most useless), we focus on the 10 that actually matter:
-- 10 schema types proven for SEO and AI citations
+Unlike competitors offering 35+ schema types (most useless), we focus on schemas that actually matter:
+- 10 schema types proven for SEO and AI citations (Organization, LocalBusiness, Event, FAQPage, Service, Article, HowTo, Person, JobPosting, Course)
 - Intelligent wizard with recommendations
 - Conflict detection for major SEO plugins (Yoast, Rank Math, AIOSEO)
 - Auto-fill functionality pulls data from your content
@@ -358,9 +369,9 @@ Built with ❤️ for nonprofits, political organizations, and mission-driven bu
 
 Yes, if you need Event, Service, HowTo, FAQ, or specialized schema types! Those SEO plugins handle basic Article schema well, but they don't support the other schema types that can generate rich results.
 
-**FatLab Schema Wizard fills the gaps** with the 10 schema types that actually deliver results. Our conflict detection ensures you don't create duplicate schema—keep your SEO plugin for Article schema, and use FatLab for everything else.
+**FatLab Schema Wizard fills the gaps** with the 11 schema types that actually deliver results. Our conflict detection ensures you don't create duplicate schema—keep your SEO plugin for Article schema, and use FatLab for everything else.
 
-### Why only 10 schema types? Other plugins have 35+!
+### Why only 11 schema types? Other plugins have 35+!
 
 That's exactly the point. **Most schema types don't matter.** We analyzed which schemas actually:
 - Generate rich results in Google
@@ -368,7 +379,7 @@ That's exactly the point. **Most schema types don't matter.** We analyzed which 
 - Improve click-through rates
 - Are relevant for typical websites
 
-The answer? About 10 schema types. The rest are either too specialized (like MedicalScholarlyArticle), not supported for rich results (like BreadcrumbList is handled automatically), or simply ignored by AI assistants.
+The answer? About 11 schema types. The rest are either too specialized (like MedicalScholarlyArticle), not supported for rich results (like BreadcrumbList is handled automatically), or simply ignored by AI assistants.
 
 We focus on quality over quantity so you spend time on schemas that actually help your site, not obscure types that deliver zero value.
 

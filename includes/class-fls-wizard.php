@@ -37,6 +37,11 @@ class FLS_Wizard {
 				'description' => __( 'An event with date, time, and location', 'fatlabschema' ),
 				'icon'        => 'dashicons-calendar-alt',
 			),
+			'video'         => array(
+				'label'       => __( 'Video Content', 'fatlabschema' ),
+				'description' => __( 'Video content including YouTube, Vimeo, or self-hosted videos', 'fatlabschema' ),
+				'icon'        => 'dashicons-video-alt3',
+			),
 			'jobposting'    => array(
 				'label'       => __( 'Job Posting', 'fatlabschema' ),
 				'description' => __( 'A job opening your organization is hiring for', 'fatlabschema' ),
@@ -234,6 +239,19 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Training programs, workshops, volunteer orientation, certification courses, webinars', 'fatlabschema' ),
+			),
+			'video'         => array(
+				'recommended'  => true,
+				'title'        => __( 'Recommended: Video Schema', 'fatlabschema' ),
+				'message'      => __( 'This schema helps your video content appear in video search results with rich snippets.', 'fatlabschema' ),
+				'benefits'     => array(
+					__( 'Appear in Google Video Search', 'fatlabschema' ),
+					__( 'Show thumbnail, duration, and upload date', 'fatlabschema' ),
+					__( 'Display in video carousels and rich results', 'fatlabschema' ),
+					__( 'AI assistants can reference your video content', 'fatlabschema' ),
+				),
+				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
+				'use_cases'    => __( 'Great for: YouTube videos, Vimeo, video tutorials, webinars, promotional videos, testimonials', 'fatlabschema' ),
 			),
 		);
 

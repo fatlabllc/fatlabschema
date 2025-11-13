@@ -149,6 +149,17 @@ class FLS_Schema_Generator {
 	}
 
 	/**
+	 * Generate Video schema.
+	 *
+	 * @param array $data Schema data.
+	 * @param int   $post_id Post ID.
+	 * @return array
+	 */
+	public static function generate_video_schema( $data, $post_id = null ) {
+		return FLS_Schema_Video::generate( $data, $post_id );
+	}
+
+	/**
 	 * Format datetime for schema.org.
 	 *
 	 * @param string $date Date string.
