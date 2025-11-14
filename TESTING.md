@@ -183,7 +183,7 @@ If you notice slowdowns:
 
 ## Support & Questions
 
-- **Documentation**: https://fatlabwebsupport.com/projects/schema-wizard/docs
+- **Documentation**: https://fatlabwebsupport.com/projects/schema-wizard/docs/
 - **Support**: https://fatlabwebsupport.com/get-support/
 - **GitHub Issues**: https://github.com/fatlabllc/fatlabschema/issues
 

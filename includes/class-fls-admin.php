@@ -456,7 +456,7 @@ class FLS_Admin {
 
 		$screen->set_help_sidebar(
 			'<p><strong>' . __( 'For more information:', 'fatlabschema' ) . '</strong></p>' .
-			'<p><a href="https://fatlabwebsupport.com/projects/schema-wizard/docs" target="_blank">' . __( 'Documentation', 'fatlabschema' ) . '</a></p>' .
+			'<p><a href="https://fatlabwebsupport.com/projects/schema-wizard/docs/" target="_blank">' . __( 'Documentation', 'fatlabschema' ) . '</a></p>' .
 			'<p><a href="https://fatlabwebsupport.com/get-support/" target="_blank">' . __( 'Support', 'fatlabschema' ) . '</a></p>'
 		);
 	}

@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h2><?php esc_html_e( 'Need More Help?', 'fatlabschema' ); ?></h2>
 		<p>
 			<a href="https://fatlabwebsupport.com/get-support/" class="button button-primary" target="_blank"><?php esc_html_e( 'Contact Support', 'fatlabschema' ); ?></a>
-			<a href="https://fatlabwebsupport.com/projects/schema-wizard/docs" class="button button-secondary" target="_blank"><?php esc_html_e( 'View Full Documentation', 'fatlabschema' ); ?></a>
+			<a href="https://fatlabwebsupport.com/projects/schema-wizard/docs/" class="button button-secondary" target="_blank"><?php esc_html_e( 'View Full Documentation', 'fatlabschema' ); ?></a>
 		</p>
 	</div>
 </div>

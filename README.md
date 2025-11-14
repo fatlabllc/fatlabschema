@@ -268,7 +268,12 @@ See [DEV-README.md](DEV-README.md) for detailed development workflow.
 
 ## 📝 Changelog
 
-### Version 1.0.2 (Current)
+### Version 1.0.3 (Current)
+**Documentation URL Updates**
+
+- 📝 Updated: All documentation URLs to point to correct documentation location
+
+### Version 1.0.2
 **Organization Schema Enhancements**
 
 - ✨ New: YouTube field added to Organization social profiles
@@ -303,7 +308,7 @@ Unlike competitors offering 35+ schema types (most useless), we focus on schemas
 ## 🐛 Support & Bug Reports
 
 ### Getting Help
-- **Documentation**: [https://fatlabwebsupport.com/projects/schema-wizard/docs](https://fatlabwebsupport.com/projects/schema-wizard/docs)
+- **Documentation**: [https://fatlabwebsupport.com/projects/schema-wizard/docs/](https://fatlabwebsupport.com/projects/schema-wizard/docs/)
 - **Support**: [https://fatlabwebsupport.com/get-support/](https://fatlabwebsupport.com/get-support/)
 - **WordPress.org Forums**: Coming soon after initial release
 
@@ -361,7 +366,7 @@ Built with ❤️ for nonprofits, political organizations, and mission-driven bu
 
 - **Plugin Homepage**: [https://fatlabwebsupport.com/projects/schema-wizard/](https://fatlabwebsupport.com/projects/schema-wizard/)
 - **GitHub Repository**: [https://github.com/fatlabllc/fatlabschema](https://github.com/fatlabllc/fatlabschema)
-- **Documentation**: [https://fatlabwebsupport.com/projects/schema-wizard/docs](https://fatlabwebsupport.com/projects/schema-wizard/docs)
+- **Documentation**: [https://fatlabwebsupport.com/projects/schema-wizard/docs/](https://fatlabwebsupport.com/projects/schema-wizard/docs/)
 - **Support**: [https://fatlabwebsupport.com/get-support/](https://fatlabwebsupport.com/get-support/)
 - **Schema.org**: [https://schema.org](https://schema.org)
 - **Google Rich Results Test**: [https://search.google.com/test/rich-results](https://search.google.com/test/rich-results)
