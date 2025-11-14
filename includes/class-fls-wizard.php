@@ -121,6 +121,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Physical offices, campaign headquarters, retail stores, service locations', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Contact page with physical address', 'fatlabschema' ),
+					__( 'Individual location pages', 'fatlabschema' ),
+					__( '"About Us" page with location details', 'fatlabschema' ),
+					__( 'Store/office location landing pages', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Homepage (unless single-location business)', 'fatlabschema' ),
+					__( 'Blog posts or news articles', 'fatlabschema' ),
+					__( 'Service description pages', 'fatlabschema' ),
+					__( 'Every page on your site', 'fatlabschema' ),
+				),
 			),
 			'event'         => array(
 				'recommended'  => true,
@@ -134,6 +146,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Fundraisers, rallies, town halls, volunteer events, webinars', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Individual event detail pages', 'fatlabschema' ),
+					__( 'Specific event landing pages', 'fatlabschema' ),
+					__( 'Registration/ticket pages for single events', 'fatlabschema' ),
+					__( 'Webinar or virtual event pages', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Event calendar or listing pages', 'fatlabschema' ),
+					__( 'Homepage with multiple events', 'fatlabschema' ),
+					__( 'Event archive pages', 'fatlabschema' ),
+					__( 'General "Events" overview pages', 'fatlabschema' ),
+				),
 			),
 			'faqpage'       => array(
 				'recommended'  => true,
@@ -147,6 +171,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: FAQ pages, policy positions, campaign stances, "What We Do" pages', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Pages with actual Q&A format (Question → Answer)', 'fatlabschema' ),
+					__( 'FAQ pages with structured questions', 'fatlabschema' ),
+					__( 'Support pages with common questions', 'fatlabschema' ),
+					__( 'Policy pages structured as Q&A', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'General information pages without Q&A format', 'fatlabschema' ),
+					__( 'Policy pages without question structure', 'fatlabschema' ),
+					__( 'Contact pages', 'fatlabschema' ),
+					__( 'Blog posts or articles', 'fatlabschema' ),
+				),
 			),
 			'article'       => array(
 				'recommended'  => true,
@@ -160,6 +196,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Blog posts, news articles, opinion pieces', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Individual blog posts', 'fatlabschema' ),
+					__( 'News articles', 'fatlabschema' ),
+					__( 'Opinion pieces or editorials', 'fatlabschema' ),
+					__( 'Press releases', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Blog archive or category pages', 'fatlabschema' ),
+					__( 'Author profile pages', 'fatlabschema' ),
+					__( 'Homepage', 'fatlabschema' ),
+					__( 'General informational pages', 'fatlabschema' ),
+				),
 				'conflict_check' => true,
 			),
 			'scholarly'     => array(
@@ -174,6 +222,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Research papers, white papers, policy publications, studies', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Individual research paper pages', 'fatlabschema' ),
+					__( 'White paper landing pages', 'fatlabschema' ),
+					__( 'Published studies or reports', 'fatlabschema' ),
+					__( 'Academic publications', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Publication list or bibliography pages', 'fatlabschema' ),
+					__( 'Researcher profile pages', 'fatlabschema' ),
+					__( 'General blog posts or articles', 'fatlabschema' ),
+					__( 'Abstract-only pages', 'fatlabschema' ),
+				),
 			),
 			'service'       => array(
 				'recommended'  => true,
@@ -187,6 +247,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Counseling, legal aid, hosting services, consulting', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Individual service detail pages', 'fatlabschema' ),
+					__( 'Specific service offering pages', 'fatlabschema' ),
+					__( 'Service landing pages with pricing', 'fatlabschema' ),
+					__( 'Pages describing a single service', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Services overview or listing pages', 'fatlabschema' ),
+					__( 'Homepage with multiple services', 'fatlabschema' ),
+					__( 'Service category pages', 'fatlabschema' ),
+					__( '"What We Do" pages with many services', 'fatlabschema' ),
+				),
 			),
 			'howto'         => array(
 				'recommended'  => true,
@@ -200,6 +272,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: "How to volunteer," "How to donate," instructional guides', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Pages with clear step-by-step instructions', 'fatlabschema' ),
+					__( 'Tutorial pages with numbered steps', 'fatlabschema' ),
+					__( 'Guides with sequential procedures', 'fatlabschema' ),
+					__( 'Process documentation pages', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'General informational content', 'fatlabschema' ),
+					__( 'Blog posts without step-by-step format', 'fatlabschema' ),
+					__( 'Overview pages without specific steps', 'fatlabschema' ),
+					__( 'FAQ pages (use FAQPage schema instead)', 'fatlabschema' ),
+				),
 			),
 			'person'        => array(
 				'recommended'  => true,
@@ -213,6 +297,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Political candidates, executive directors, board members, staff profiles', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Individual biography/profile pages', 'fatlabschema' ),
+					__( 'Author pages with detailed bio', 'fatlabschema' ),
+					__( 'Leadership profile pages', 'fatlabschema' ),
+					__( 'Staff member detail pages', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Team listing or directory pages', 'fatlabschema' ),
+					__( '"Meet the Team" overview pages', 'fatlabschema' ),
+					__( 'Staff directory pages with multiple people', 'fatlabschema' ),
+					__( 'General organization pages', 'fatlabschema' ),
+				),
 			),
 			'jobposting'    => array(
 				'recommended'  => true,
@@ -226,6 +322,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Staff positions, volunteer roles, internships, contractor positions', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Individual job posting detail pages', 'fatlabschema' ),
+					__( 'Specific position description pages', 'fatlabschema' ),
+					__( 'Job application pages', 'fatlabschema' ),
+					__( 'Individual internship/volunteer role pages', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Careers overview pages', 'fatlabschema' ),
+					__( '"We\'re Hiring" pages without job details', 'fatlabschema' ),
+					__( 'Job listing or search pages', 'fatlabschema' ),
+					__( 'General employment information pages', 'fatlabschema' ),
+				),
 			),
 			'course'        => array(
 				'recommended'  => true,
@@ -239,6 +347,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: Training programs, workshops, volunteer orientation, certification courses, webinars', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Individual course detail pages', 'fatlabschema' ),
+					__( 'Specific workshop or training pages', 'fatlabschema' ),
+					__( 'Single webinar registration pages', 'fatlabschema' ),
+					__( 'Certification program pages', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Course catalog or listing pages', 'fatlabschema' ),
+					__( 'General education overview pages', 'fatlabschema' ),
+					__( 'Training department pages', 'fatlabschema' ),
+					__( 'Pages listing multiple courses', 'fatlabschema' ),
+				),
 			),
 			'video'         => array(
 				'recommended'  => true,
@@ -252,6 +372,18 @@ class FLS_Wizard {
 				),
 				'benefits_title' => __( 'This schema will help:', 'fatlabschema' ),
 				'use_cases'    => __( 'Great for: YouTube videos, Vimeo, video tutorials, webinars, promotional videos, testimonials', 'fatlabschema' ),
+				'when_to_use'  => array(
+					__( 'Pages that EMBED video as primary content', 'fatlabschema' ),
+					__( 'Video landing pages', 'fatlabschema' ),
+					__( 'Tutorial pages with video player', 'fatlabschema' ),
+					__( 'Webinar replay pages', 'fatlabschema' ),
+				),
+				'when_not_to_use' => array(
+					__( 'Pages that only link to videos', 'fatlabschema' ),
+					__( 'Video gallery or listing pages', 'fatlabschema' ),
+					__( 'Pages where video is supplementary', 'fatlabschema' ),
+					__( 'Blog posts with video as side content', 'fatlabschema' ),
+				),
 			),
 		);
 

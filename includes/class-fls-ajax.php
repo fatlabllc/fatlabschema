@@ -114,6 +114,28 @@ class FLS_Ajax {
 				<p class="fls-use-cases"><?php echo esc_html( $recommendation['use_cases'] ); ?></p>
 			<?php endif; ?>
 
+			<?php if ( ! empty( $recommendation['when_to_use'] ) ) : ?>
+				<div class="fls-usage-guidance fls-when-to-use">
+					<p><strong><?php esc_html_e( 'When to use this schema:', 'fatlabschema' ); ?></strong></p>
+					<ul>
+						<?php foreach ( $recommendation['when_to_use'] as $use_case ) : ?>
+							<li class="fls-usage-item"><?php echo esc_html( $use_case ); ?></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			<?php endif; ?>
+
+			<?php if ( ! empty( $recommendation['when_not_to_use'] ) ) : ?>
+				<div class="fls-usage-guidance fls-when-not-to-use">
+					<p><strong><?php esc_html_e( 'When NOT to use this schema:', 'fatlabschema' ); ?></strong></p>
+					<ul>
+						<?php foreach ( $recommendation['when_not_to_use'] as $avoid_case ) : ?>
+							<li class="fls-usage-item"><?php echo esc_html( $avoid_case ); ?></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			<?php endif; ?>
+
 			<?php if ( ! empty( $recommendation['note'] ) ) : ?>
 				<p><em><?php echo esc_html( $recommendation['note'] ); ?></em></p>
 			<?php endif; ?>
