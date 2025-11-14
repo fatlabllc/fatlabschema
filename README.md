@@ -268,7 +268,12 @@ See [DEV-README.md](DEV-README.md) for detailed development workflow.
 
 ## 📝 Changelog
 
-### Version 1.0.1 (Current)
+### Version 1.0.2 (Current)
+**Organization Schema Enhancements**
+
+- ✨ New: YouTube field added to Organization social profiles
+
+### Version 1.0.1
 **Video Schema Added**
 
 Expanding from 10 to 11 schema types with the addition of VideoObject:

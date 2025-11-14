@@ -263,6 +263,15 @@ $organization = get_option( 'fatlabschema_organization', array() );
 					<input type="url" name="fatlabschema_organization[instagram]" id="fatlabschema_org_instagram" value="<?php echo esc_attr( $organization['instagram'] ?? '' ); ?>" class="regular-text" placeholder="https://instagram.com/yourhandle" />
 				</td>
 			</tr>
+
+			<tr>
+				<th scope="row">
+					<label for="fatlabschema_org_youtube"><?php esc_html_e( 'YouTube', 'fatlabschema' ); ?></label>
+				</th>
+				<td>
+					<input type="url" name="fatlabschema_organization[youtube]" id="fatlabschema_org_youtube" value="<?php echo esc_attr( $organization['youtube'] ?? '' ); ?>" class="regular-text" placeholder="https://youtube.com/@yourchannel" />
+				</td>
+			</tr>
 		</table>
 
 		<div id="fls-ngo-fields" style="<?php echo ( isset( $organization['type'] ) && ( 'NGO' === $organization['type'] || 'PoliticalOrganization' === $organization['type'] ) ) ? '' : 'display:none;'; ?>">
