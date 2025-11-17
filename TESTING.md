@@ -227,6 +227,28 @@ If you're a developer:
 - Try customizing schema output
 - Review security (nonces, sanitization, escaping)
 
+### Automated Schema Output Testing
+For developers with WP-CLI access:
+
+**Test All Schemas Output**
+Run the comprehensive schema output test that validates all 11 schema types:
+
+```bash
+wp eval-file tests/test-all-schemas.php --allow-root
+```
+
+This test:
+- Applies all 11 schema types to a test page with dummy data
+- Verifies each schema generates valid JSON-LD output
+- Identifies any schemas that fail to output
+- Displays detailed schema output for inspection
+- Validates data structure compatibility (FAQPage, HowTo, etc.)
+
+**What it Tests:**
+- Organization, Article, Event, FAQPage, HowTo, Person, Service, LocalBusiness, JobPosting, Course, VideoObject
+
+**Expected Result:** All 11 schemas should output correctly with proper JSON-LD structure.
+
 ---
 
 ## Thank You!
