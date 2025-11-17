@@ -74,6 +74,16 @@ class FLS_Admin {
 			array( $this, 'render_plugin_settings_page' )
 		);
 
+		// Schema Overview submenu
+		add_submenu_page(
+			'fatlabschema',
+			__( 'Schema Overview', 'fatlabschema' ),
+			__( 'Schema Overview', 'fatlabschema' ),
+			'manage_options',
+			'fatlabschema-overview',
+			array( $this, 'render_overview_page' )
+		);
+
 		// Tools submenu
 		add_submenu_page(
 			'fatlabschema',
@@ -345,6 +355,7 @@ class FLS_Admin {
 		$our_pages = array(
 			'toplevel_page_fatlabschema',
 			'schema-wizard_page_fatlabschema-settings',
+			'schema-wizard_page_fatlabschema-overview',
 			'schema-wizard_page_fatlabschema-tools',
 			'schema-wizard_page_fatlabschema-help',
 		);
@@ -503,5 +514,16 @@ class FLS_Admin {
 		}
 
 		require_once FATLABSCHEMA_PATH . 'admin/views/help-page.php';
+	}
+
+	/**
+	 * Render schema overview page.
+	 */
+	public function render_overview_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		require_once FATLABSCHEMA_PATH . 'admin/views/overview-page.php';
 	}
 }
